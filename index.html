@@ -4,9 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLACIA31 | Green AI Data Infrastructure</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -18,368 +33,807 @@
                             dark: '#050810',
                             card: '#0F172A',
                             accent: '#1E293B',
-                            green: '#10B981'
+                            green: '#10B981',
+                            nvidia: '#76b900'
                         }
                     }
                 }
             }
         }
     </script>
+    
     <style>
+        /* Combined Styles */
         html { scroll-behavior: smooth; }
         section { scroll-margin-top: 5rem; }
         
-        /* Hero Background: 조감도를 100% 살리기 위한 설정 */
+        body {
+            margin: 0; padding: 0; overflow-x: hidden;
+            background-color: #050810; color: #ffffff;
+            -webkit-user-select: none; user-select: none;
+            -moz-user-select: none; -ms-user-select: none;
+        }
+
+        /* 3D WebGL Canvas Styles */
+        #webgl-canvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0; pointer-events: none; outline: none;
+        }
+        .content-layer { position: relative; z-index: 10; }
+        .transparent-section { background-color: transparent; position: relative; }
+        
+        /* Blending gradients for 3D section */
+        .blend-top { position: absolute; top: 0; left: 0; width: 100%; height: 250px; background: linear-gradient(to bottom, #050810, transparent); pointer-events: none; z-index: -1; }
+        .blend-bottom { position: absolute; bottom: 0; left: 0; width: 100%; height: 250px; background: linear-gradient(to top, #050810, transparent); pointer-events: none; z-index: -1; }
+
+        /* Loader Styles */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #02040A; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1.0s ease-out;
+        }
+        .spinner { width: 50px; height: 50px; border: 3px solid rgba(118, 185, 0, 0.1); border-top: 3px solid #76b900; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 24px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* General UI Backgrounds */
         .hero-bg {
             background-image: url('patagonia_datacenter.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed; /* 패럴랙스 스크롤 효과 */
+            background-size: cover; background-position: center; background-attachment: fixed;
         }
-
-        /* 텍스트 그림자: 배경 이미지가 밝아도 글씨가 잘 보이도록 처리 */
-        .text-shadow-strong {
-            text-shadow: 0px 4px 20px rgba(0, 0, 0, 0.8);
-        }
-
         .future-bg {
             background-image: url('https://images.unsplash.com/photo-1518281361980-b26bfd556770?q=80&w=2000&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
+            background-size: cover; background-position: center;
         }
-
         .surroundings-img {
             background-image: url('https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?q=80&w=1200&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
+            background-size: cover; background-position: center;
         }
-
         .company-bg {
             background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2000&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
+            background-size: cover; background-position: center;
         }
 
-        .glass-nav {
-            background: rgba(5, 8, 16, 0.7);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        .text-shadow-strong { text-shadow: 0px 4px 20px rgba(0, 0, 0, 0.8); }
+        .glass-nav { background: rgba(5, 8, 16, 0.7); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+
+        /* Architecture Section Cards */
+        .step {
+            height: 160vh;
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 0 8vw; pointer-events: none;
+        }
+        .glass-card-3d {
+            background: rgba(10, 15, 25, 0.75); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08); padding: 3.5rem; border-radius: 20px; max-width: 550px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.9); pointer-events: auto; opacity: 0; transform: translateY(50px);
         }
 
-        .gradient-text {
-            background: linear-gradient(to right, #00D2FF, #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .border-blue { border-left: 4px solid #00D2FF !important; }
+        .border-orange { border-left: 4px solid #f59e0b !important; }
+        .border-green { border-left: 4px solid #76b900 !important; }
+        .border-silver { border-left: 4px solid #cbd5e1 !important; }
 
+        .tagline {
+            font-size: 0.75rem; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase;
+            margin-bottom: 1.2rem; display: inline-block; padding: 6px 12px; border-radius: 4px; background: rgba(255,255,255,0.05);
+        }
+        .tag-blue { color: #00D2FF; border: 1px solid rgba(0,210,255,0.2); }
+        .tag-orange { color: #f59e0b; border: 1px solid rgba(245,158,11,0.2); }
+        .tag-green { color: #76b900; border: 1px solid rgba(118,185,0,0.2); }
+        .tag-silver { color: #cbd5e1; border: 1px solid rgba(203,213,225,0.2); }
+
+        .glass-card-3d h2 {
+            font-size: 2.8rem; font-weight: 800; margin: 0 0 1.2rem 0; line-height: 1.1; letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff, #8892b0); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .glass-card-3d p { font-size: 1.15rem; line-height: 1.8; color: #94a3b8; margin: 0 0 1.5rem 0; }
+        .tech-specs { font-size: 0.85rem; color: #64748b; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem; }
+        .tech-specs span { display: block; margin-bottom: 0.5rem; }
+        .tech-specs strong { color: #e2e8f0; }
+
+        /* Custom UI Elements */
+        .gradient-text { background: linear-gradient(to right, #00D2FF, #ffffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .pipeline-line {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #00D2FF, transparent);
-            background-size: 200% 100%;
+            height: 2px; background: linear-gradient(90deg, transparent, #00D2FF, transparent); background-size: 200% 100%;
             animation: flow 3s linear infinite;
         }
-        @keyframes flow {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-    </style>
-	
-	<style>
-        body {
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+/Edge */
-            user-select: none; /* Standard */
-        }
+        @keyframes flow { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     </style>
 
     <script>
-        // 1. 마우스 우클릭 차단
-        document.addEventListener('contextmenu', function(event) {
-            event.preventDefault();
-        });
-
-        // 2. 주요 단축키 차단 (F12, Ctrl+Shift+I, Ctrl+U 등)
+        // Security Scripts
+        document.addEventListener('contextmenu', function(event) { event.preventDefault(); });
         document.onkeydown = function(event) {
-            // F12 (개발자 도구)
-            if (event.keyCode === 123) {
-                return false;
-            }
-            // Ctrl + Shift + I (개발자 도구)
-            if (event.ctrlKey && event.shiftKey && event.keyCode === 73) {
-                return false;
-            }
-            // Ctrl + Shift + J (개발자 도구 콘솔)
-            if (event.ctrlKey && event.shiftKey && event.keyCode === 74) {
-                return false;
-            }
-            // Ctrl + U (페이지 소스 보기)
-            if (event.ctrlKey && event.keyCode === 85) {
-                return false;
-            }
-            // Ctrl + S (페이지 저장)
-            if (event.ctrlKey && event.keyCode === 83) {
-                return false;
-            }
+            if (event.keyCode === 123) return false;
+            if (event.ctrlKey && event.shiftKey && event.keyCode === 73) return false;
+            if (event.ctrlKey && event.shiftKey && event.keyCode === 74) return false;
+            if (event.ctrlKey && event.keyCode === 85) return false;
+            if (event.ctrlKey && event.keyCode === 83) return false;
         };
     </script>
 
 </head>
 <body class="bg-glacia-dark text-white antialiased">
 
-    <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <a href="#home" class="flex items-center gap-2 group text-shadow-strong">
-                    <i class="fa-solid fa-snowflake text-glacia-blue text-2xl group-hover:rotate-180 transition-transform duration-700"></i>
-                    <span class="font-extrabold text-2xl tracking-tighter uppercase">GLACIA<span class="text-glacia-blue">31</span></span>
-                </a>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#vision" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Vision</a>
-                    <a href="#environment" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Environment</a>
-                    <a href="#netzero" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Net Zero</a>
-                    <a href="#solutions" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Solutions</a>
-                    <a href="#company" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Company</a>
-                    <a href="mailto:glacia31llc@gmail.com" class="bg-glacia-blue text-black hover:bg-white transition-all duration-300 px-6 py-2.5 rounded-full text-sm font-bold shadow-lg ml-4">
-                        Contact Us
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div id="loader">
+        <div class="spinner"></div>
+        <div style="font-size: 0.8rem; font-weight: 800; letter-spacing: 4px; color: #888; text-transform: uppercase;">Building Digital Twin...</div>
+    </div>
 
-    <section id="home" class="relative h-screen flex items-center justify-center hero-bg">
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-glacia-dark/90"></div>
+    <canvas id="webgl-canvas"></canvas>
+
+    <div class="content-layer">
         
-        <div class="relative z-10 text-center px-4 max-w-6xl mx-auto mt-20">
-            <div class="inline-block px-4 py-1.5 mb-6 rounded-full border border-white/30 bg-black/40 backdrop-blur-md">
-                <span class="text-glacia-blue text-xs font-bold tracking-widest uppercase">Pioneering Net-Zero AI</span>
-            </div>
-            
-            <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter mb-8 leading-none text-shadow-strong">
-                <span class="text-white">GREEN AI</span> <br> INFRASTRUCTURE
-            </h1>
-            <p class="text-xl md:text-2xl text-white mb-12 max-w-3xl mx-auto font-medium leading-relaxed text-shadow-strong">
-                GLACIA31 develops and consults on 100% renewable-powered data centers for the world's most demanding AI models.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-5">
-                <a href="#vision" class="px-10 py-4 bg-glacia-blue text-black font-bold rounded-full hover:scale-105 transition shadow-[0_0_30px_rgba(0,210,255,0.6)]">
-                    EXPLORE THE FUTURE
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <section id="vision" class="py-32 bg-glacia-dark relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row gap-16 items-center">
-                <div class="lg:w-1/2 relative z-10">
-                    <h2 class="text-glacia-blue font-bold uppercase tracking-widest text-sm mb-4">Our Vision</h2>
-                    <h3 class="text-4xl md:text-6xl font-extrabold tracking-tighter mb-8 leading-tight">
-                        Building the <br> Sustainable Future <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-600">in the Extreme.</span>
-                    </h3>
-                    <p class="text-gray-400 text-lg leading-relaxed mb-6 font-light">
-                        We leverage the natural advantages of cold climates to redefine what is possible in AI infrastructure. By moving massive compute power to regions with naturally freezing temperatures, we drastically eliminate the need for artificial, energy-heavy cooling systems.
-                    </p>
-                    <p class="text-gray-400 text-lg leading-relaxed mb-8 font-light">
-                        Our strategic development of data center campuses in glacial and sub-arctic zones unlocks true high-density scalability for next-generation GPUs, while remaining deeply rooted in environmental harmony.
-                    </p>
-                    <a href="#netzero" class="flex items-center gap-2 text-white font-bold hover:text-glacia-blue transition">
-                        Discover our Tech <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-                <div class="lg:w-1/2 w-full h-[600px] rounded-[40px] overflow-hidden relative shadow-2xl border border-white/10 group">
-                    <div class="absolute inset-0 future-bg group-hover:scale-105 transition duration-1000"></div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                    <div class="absolute bottom-8 left-8">
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center border border-white/20">
-                                <i class="fa-solid fa-location-crosshairs text-glacia-blue"></i>
-                            </div>
-                            <div>
-                                <p class="text-white font-bold tracking-widest text-sm uppercase">Strategic Locations</p>
-                                <p class="text-gray-400 text-xs">Central Asia, Patagonia, Andes & Global Glacial Zones</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="environment" class="py-32 bg-[#080C14]">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex flex-col-reverse lg:flex-row gap-16 items-center">
-                <div class="lg:w-5/12 w-full h-[700px] rounded-full overflow-hidden relative border-8 border-[#0F172A] shadow-[0_0_50px_rgba(0,210,255,0.1)] group">
-                    <div class="absolute inset-0 surroundings-img group-hover:scale-110 transition duration-1000"></div>
-                    <div class="absolute inset-0 bg-glacia-dark/20 group-hover:bg-transparent transition duration-500"></div>
-                </div>
-                <div class="lg:w-7/12">
-                    <h2 class="text-glacia-green font-bold uppercase tracking-widest text-sm mb-4">Ethical Development</h2>
-                    <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter mb-8">Honoring our surroundings with sustainable practices.</h3>
-                    <p class="text-gray-400 text-lg leading-relaxed mb-10 font-light">
-                        At GLACIA31, we adapt our practices to nature—not the other way around. Building mega-scale infrastructure requires a profound respect for the ecosystems we inhabit. From zero-water cooling solutions to architecture that blends seamlessly with the natural horizon, every facility is designed to leave no trace.
-                    </p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <i class="fa-solid fa-droplet-slash text-2xl text-glacia-blue mb-4"></i>
-                            <h4 class="text-xl font-bold text-white mb-2">Waterless Cooling</h4>
-                            <p class="text-gray-500 text-sm leading-relaxed">We utilize advanced closed-loop systems, preserving millions of gallons of local freshwater resources annually.</p>
-                        </div>
-                        <div>
-                            <i class="fa-solid fa-tree text-2xl text-glacia-green mb-4"></i>
-                            <h4 class="text-xl font-bold text-white mb-2">Wildlife Protection</h4>
-                            <p class="text-gray-500 text-sm leading-relaxed">Campuses are designed with migration corridors and low-impact lighting to ensure native fauna remains undisturbed.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="netzero" class="py-32 bg-glacia-dark border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center mb-20">
-                <h2 class="text-glacia-blue font-bold uppercase tracking-widest text-sm mb-4">Engineering for the Planet</h2>
-                <h3 class="text-4xl md:text-6xl font-extrabold tracking-tighter mb-6">Net Zero Technology.<br>Circular Economy.</h3>
-                <p class="text-gray-400 max-w-2xl mx-auto font-light text-lg">
-                    True sustainability goes beyond renewable energy. We implement holistic, climate-positive engineering designed to give back to the grid and the environment.
-                </p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-glacia-card p-10 rounded-3xl border border-white/5 hover:-translate-y-2 transition duration-500 shadow-xl group">
-                    <h3 class="text-5xl font-black text-glacia-blue mb-4 group-hover:scale-110 origin-left transition">1.1</h3>
-                    <h4 class="text-xl font-bold text-white mb-3">Industry Best PUE</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Achieving near-perfect Power Usage Effectiveness through outside ambient air and revolutionary liquid cooling integrations.</p>
-                </div>
-                <div class="bg-glacia-card p-10 rounded-3xl border border-white/5 hover:-translate-y-2 transition duration-500 shadow-xl group">
-                    <h3 class="text-5xl font-black text-glacia-green mb-4 group-hover:scale-110 origin-left transition">100%</h3>
-                    <h4 class="text-xl font-bold text-white mb-3">Heat Reuse System</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">Waste heat generated by AI servers is captured and redirected to local municipalities for district heating and greenhouse farming.</p>
-                </div>
-                <div class="bg-glacia-card p-10 rounded-3xl border border-white/5 hover:-translate-y-2 transition duration-500 shadow-xl group">
-                    <h3 class="text-5xl font-black text-white mb-4 group-hover:scale-110 origin-left transition">&lt;0</h3>
-                    <h4 class="text-xl font-bold text-white mb-3">Carbon Positive Build</h4>
-                    <p class="text-gray-500 text-sm leading-relaxed">By utilizing cross-laminated timber (CLT) and green concrete, our physical structures sequester more carbon than they emit during construction.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-[#080C14] overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="mb-16 text-center">
-                <h3 class="text-3xl font-extrabold tracking-tighter text-gray-300">The Sustainable Intelligence Pipeline</h3>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 relative">
-                <div class="relative z-10 text-center px-6">
-                    <div class="w-20 h-20 mx-auto bg-glacia-card rounded-2xl flex items-center justify-center border border-white/10 mb-6 shadow-[0_0_20px_rgba(0,210,255,0.1)]">
-                        <i class="fa-solid fa-solar-panel text-3xl text-glacia-blue"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-3">1. Stranded Energy</h4>
-                    <p class="text-gray-500 text-sm">Tapping into isolated wind, solar, and hydro grids.</p>
-                </div>
-                <div class="relative z-10 text-center px-6">
-                    <div class="w-20 h-20 mx-auto bg-glacia-card rounded-2xl flex items-center justify-center border border-white/10 mb-6 shadow-[0_0_20px_rgba(0,210,255,0.1)]">
-                        <i class="fa-solid fa-microchip text-3xl text-glacia-blue"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-3">2. High-Density Compute</h4>
-                    <p class="text-gray-500 text-sm">Processing massive LLMs with sub-zero natural cooling.</p>
-                </div>
-                <div class="relative z-10 text-center px-6">
-                    <div class="w-20 h-20 mx-auto bg-glacia-card rounded-2xl flex items-center justify-center border border-white/10 mb-6 shadow-[0_0_20px_rgba(0,210,255,0.1)]">
-                        <i class="fa-solid fa-earth-americas text-3xl text-glacia-blue"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-white mb-3">3. Zero-Carbon Output</h4>
-                    <p class="text-gray-500 text-sm">Delivering AI breakthroughs without the carbon footprint.</p>
-                </div>
-                <div class="hidden lg:block absolute top-[40px] left-[16%] w-[68%] z-0 opacity-40">
-                    <div class="pipeline-line"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="solutions" class="py-32 bg-glacia-dark border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                <div class="max-w-2xl">
-                    <h2 class="text-glacia-blue font-bold uppercase tracking-widest text-sm mb-4">Solutions</h2>
-                    <h3 class="text-4xl md:text-6xl font-extrabold tracking-tighter">Enterprise Infrastructure <br>for the AI Age.</h3>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-glacia-card p-10 rounded-3xl border border-white/5 hover:bg-glacia-accent transition duration-500 group cursor-pointer">
-                    <div class="flex justify-between items-start mb-12">
-                        <div class="w-16 h-16 bg-glacia-blue/10 rounded-2xl flex items-center justify-center text-glacia-blue text-2xl font-bold">01</div>
-                        <i class="fa-solid fa-building-circle-check text-gray-600 text-3xl group-hover:text-glacia-blue transition"></i>
-                    </div>
-                    <h4 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Site Development</h4>
-                    <p class="text-gray-500 leading-relaxed">End-to-end development of mega-scale data center campuses in locations with abundant renewable energy resources.</p>
-                </div>
-                <div class="bg-glacia-card p-10 rounded-3xl border border-white/5 hover:bg-glacia-accent transition duration-500 group cursor-pointer">
-                    <div class="flex justify-between items-start mb-12">
-                        <div class="w-16 h-16 bg-glacia-blue/10 rounded-2xl flex items-center justify-center text-glacia-blue text-2xl font-bold">02</div>
-                        <i class="fa-solid fa-server text-gray-600 text-3xl group-hover:text-glacia-blue transition"></i>
-                    </div>
-                    <h4 class="text-2xl font-bold mb-4 uppercase tracking-tighter">AI-Optimized Architecture</h4>
-                    <p class="text-gray-500 leading-relaxed">Consulting on high-density power distribution and direct-to-chip liquid cooling systems designed specifically for next-gen clusters.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="company" class="py-32 bg-[#080C14]">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row items-center gap-16">
-                <div class="w-full lg:w-1/2">
-                    <h2 class="text-sm font-bold tracking-widest text-glacia-blue uppercase mb-4">About Us</h2>
-                    <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter mb-8">Bridging the Gap Between Heavy AI and Ecology</h3>
-                    <p class="text-gray-400 text-lg mb-6 leading-relaxed font-light">
-                        Headquartered in Delaware, USA, GLACIA31 is a premier developer and consulting firm at the intersection of artificial intelligence and environmental responsibility.
-                    </p>
-                    <p class="text-gray-400 text-lg mb-8 leading-relaxed font-light">
-                        Our team of engineers and energy specialists work with top-tier enterprises globally to design, build, and optimize digital fortresses that run faster, cooler, and greener.
-                    </p>
-                </div>
-                <div class="w-full lg:w-1/2 relative h-[500px] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10">
-                    <div class="absolute inset-0 company-bg hover:scale-105 transition duration-700"></div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-8 left-8 right-8">
-                        <div class="bg-black/40 backdrop-blur-md p-6 rounded-2xl border border-white/10">
-                            <h4 class="text-xl font-bold text-white mb-2 tracking-tight">Global Operations</h4>
-                            <p class="text-gray-300 text-sm flex items-center gap-2"><i class="fa-solid fa-building text-glacia-blue"></i>Delivering Net-Zero AI Infrastructure Worldwide</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-black py-20 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
-                <div>
-                    <a href="#home" class="flex items-center gap-2 mb-8 text-shadow-strong">
-                        <i class="fa-solid fa-snowflake text-glacia-blue text-2xl"></i>
+		<nav class="fixed w-full z-50 glass-nav transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <a href="#home" class="flex items-center gap-2 group text-shadow-strong">
+                        <i class="fa-solid fa-snowflake text-glacia-blue text-2xl group-hover:rotate-180 transition-transform duration-700"></i>
                         <span class="font-extrabold text-2xl tracking-tighter uppercase">GLACIA<span class="text-glacia-blue">31</span></span>
                     </a>
-                    <p class="text-gray-500 max-w-sm leading-relaxed">Building the foundations for a sustainable digital intelligence era.</p>
-                </div>
-                <div class="flex flex-col items-start lg:items-end">
-                    <p class="text-white font-bold mb-4 tracking-widest uppercase text-sm">Headquarters</p>
-                    <p class="text-gray-500 text-sm lg:text-right leading-loose">
-                        1007 N Orange St. 4th Floor, 5471<br>
-                        Wilmington, DE 19801, New Castle, US
-                    </p>
-                    <a href="mailto:glacia31llc@gmail.com" class="text-glacia-blue font-bold mt-6 hover:text-white transition underline underline-offset-8">glacia31llc@gmail.com</a>
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#architecture" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Technology</a>
+                        
+                        <a href="#vision" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Vision</a>
+                        <a href="#environment" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Environment</a>
+                        <a href="#netzero" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Net Zero</a>
+                        <a href="#solutions" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Solutions</a>
+                        <a href="#company" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Company</a>
+                        <a href="mailto:glacia31llc@gmail.com" class="bg-glacia-blue text-black hover:bg-white transition-all duration-300 px-6 py-2.5 rounded-full text-sm font-bold shadow-lg ml-4">
+                            Contact Us
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold text-gray-600 uppercase tracking-widest">
-                <p>&copy; 2024 GLACIA31 LLC. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+        </nav>
 
+        <section id="home" class="relative h-screen flex items-center justify-center hero-bg bg-[#050810]">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-glacia-dark/50 to-[#050810]"></div>
+            
+            <div class="relative z-10 text-center px-4 max-w-6xl mx-auto mt-20">
+                <div class="inline-block px-4 py-1.5 mb-6 rounded-full border border-white/30 bg-black/40 backdrop-blur-md">
+                    <span class="text-glacia-blue text-xs font-bold tracking-widest uppercase">Pioneering Net-Zero AI</span>
+                </div>
+                
+                <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter mb-8 leading-none text-shadow-strong">
+                    <span class="text-white">GREEN AI</span> <br> INFRASTRUCTURE
+                </h1>
+                <p class="text-xl md:text-2xl text-white mb-12 max-w-3xl mx-auto font-medium leading-relaxed text-shadow-strong">
+                    GLACIA31 develops and consults on 100% renewable-powered data centers for the world's most demanding AI models.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-5">
+                    <a href="#architecture" class="px-10 py-4 bg-glacia-blue text-black font-bold rounded-full hover:scale-105 transition shadow-[0_0_30px_rgba(0,210,255,0.6)]">
+                        EXPLORE THE FUTURE
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="transparent-section">
+            <div class="blend-top"></div>
+            
+            <div class="w-full max-w-7xl mx-auto px-6 lg:px-8 pt-32">
+                
+                <div id="step-wind" class="step items-start">
+                    <div class="glass-card-3d gs-card border-blue pointer-events-auto">
+                        <span class="tagline tag-blue">Phase 01 | Power</span>
+                        <h2>Ultra-Capacity Onshore<br>Drivetrain.</h2>
+                        <p>Next-generation aerodynamic wind turbines convert high-altitude glacial winds into extreme kinetic power, establishing a zero-carbon foundation.</p>
+                    </div>
+                </div>
+                
+                <div id="step-bess" class="step items-end">
+                    <div class="glass-card-3d gs-card border-orange pointer-events-auto">
+                        <span class="tagline tag-orange">Phase 02 | Storage</span>
+                        <h2>Utility-Scale Megawatt<br>BESS Vault.</h2>
+                        <p>High-density liquid-cooled lithium-ion arrays store gigawatts of surplus energy, guaranteeing 100% flawless grid stability for the AI cluster.</p>
+                    </div>
+                </div>
+                
+                <div id="step-ai-gpu" class="step items-start">
+                    <div class="glass-card-3d gs-card border-green pointer-events-auto">
+                        <span class="tagline tag-green">Scale 1X | Compute Node</span>
+                        <h2>Exascale AI<br>Accelerator Sled.</h2>
+                        <p>The foundation of exascale AI. Featuring an advanced ultra-tier AI architecture mounted on a high-density PCB with extreme thermal conductive direct-to-chip cold plates.</p>
+                        <div class="tech-specs">
+                            <span><strong>Architecture:</strong> High-Density Tensor Subsystem</span>
+                            <span><strong>Thermal:</strong> Direct-to-Chip Cold Plates</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-ai-tray" class="step items-end">
+                    <div class="glass-card-3d gs-card border-green pointer-events-auto">
+                        <span class="tagline tag-green">Scale 18X | Interconnect</span>
+                        <h2>High-Bandwidth<br>Copper Backplane.</h2>
+                        <p>The system scales vertically. Multiple compute nodes integrate into a high-density sled, while massive copper switch spines drop in for bidirectional terabyte-per-second communication.</p>
+                        <div class="tech-specs">
+                            <span><strong>Interconnect:</strong> Ultra-Fast Network Fabric</span>
+                            <span><strong>Integration:</strong> Seamless Copper Bridging</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-ai-rack" class="step items-start">
+                    <div class="glass-card-3d gs-card border-blue pointer-events-auto">
+                        <span class="tagline tag-blue">Scale 72X | Infrastructure</span>
+                        <h2>600kW DLC<br>Super-Rack.</h2>
+                        <p>The full compute rack enclosure assembles. Advanced Direct Liquid Cooling (DLC) manifolds drop down to circulate chilled fluid (Blue) and extract extreme heat (Red).</p>
+                        <div class="tech-specs">
+                            <span><strong>Infrastructure:</strong> Advanced High-Density Coolant Distribution</span>
+                            <span><strong>Power:</strong> &gt;120kW per Rack Chassis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-ai-dc" class="step items-center text-center">
+                    <div class="glass-card-3d gs-card border-silver mx-auto pointer-events-auto" style="max-width: 650px;">
+                        <span class="tagline tag-silver">Scale 10,000X | AI Factory</span>
+                        <h2>Enterprise Digital<br>Twin Cluster.</h2>
+                        <p>Hundreds of racks integrate into a colossal AI Factory. Powered entirely by glacial wind and managed via advanced spatial digital twins, this is the ultimate blueprint for sustainable supercomputing.</p>
+                        <div class="tech-specs flex justify-center gap-8 mt-4">
+                            <span><strong>Total Accelerators:</strong> 32,000+</span>
+                            <span><strong>Carbon Footprint:</strong> Absolute Zero</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="h-[20vh]"></div>
+            </div>
+            <div class="blend-bottom"></div>
+        </section>
+
+        <section id="vision" class="py-32 bg-glacia-dark relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row gap-16 items-center">
+                    <div class="lg:w-1/2 relative z-10">
+                        <h2 class="text-glacia-blue font-bold uppercase tracking-widest text-sm mb-4">Our Vision</h2>
+                        <h3 class="text-4xl md:text-6xl font-extrabold tracking-tighter mb-8 leading-tight">
+                            Building the <br> Sustainable Future <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-600">in the Extreme.</span>
+                        </h3>
+                        <p class="text-gray-400 text-lg leading-relaxed mb-6 font-light">
+                            We leverage the natural advantages of cold climates to redefine what is possible in AI infrastructure. By moving massive compute power to regions with naturally freezing temperatures, we drastically eliminate the need for artificial, energy-heavy cooling systems.
+                        </p>
+                        <p class="text-gray-400 text-lg leading-relaxed mb-8 font-light">
+                            Our strategic development of data center campuses in glacial and sub-arctic zones unlocks true high-density scalability for next-generation GPUs, while remaining deeply rooted in environmental harmony.
+                        </p>
+                        <a href="#architecture" class="flex items-center gap-2 text-white font-bold hover:text-glacia-blue transition">
+                            Discover our Tech <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="lg:w-1/2 w-full h-[600px] rounded-[40px] overflow-hidden relative shadow-2xl border border-white/10 group">
+                        <div class="absolute inset-0 future-bg group-hover:scale-105 transition duration-1000"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-8 left-8">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center border border-white/20">
+                                    <i class="fa-solid fa-location-crosshairs text-glacia-blue"></i>
+                                </div>
+                                <div>
+                                    <p class="text-white font-bold tracking-widest text-sm uppercase">Strategic Locations</p>
+                                    <p class="text-gray-400 text-xs">Central Asia, Patagonia, Andes & Global Glacial Zones</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="environment" class="py-32 bg-[#080C14]">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex flex-col-reverse lg:flex-row gap-16 items-center">
+                    <div class="lg:w-5/12 w-full h-[700px] rounded-full overflow-hidden relative border-8 border-[#0F172A] shadow-[0_0_50px_rgba(0,210,255,0.1)] group">
+                        <div class="absolute inset-0 surroundings-img group-hover:scale-110 transition duration-1000"></div>
+                        <div class="absolute inset-0 bg-glacia-dark/20 group-hover:bg-transparent transition duration-500"></div>
+                    </div>
+                    <div class="lg:w-7/12">
+                        <h2 class="text-glacia-green font-bold uppercase tracking-widest text-sm mb-4">Ethical Development</h2>
+                        <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter mb-8">Honoring our surroundings with sustainable practices.</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed mb-10 font-light">
+                            At GLACIA31, we adapt our practices to nature—not the other way around. Building mega-scale infrastructure requires a profound respect for the ecosystems we inhabit. From zero-water cooling solutions to architecture that blends seamlessly with the natural horizon, every facility is designed to leave no trace.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <i class="fa-solid fa-droplet-slash text-2xl text-glacia-blue mb-4"></i>
+                                <h4 class="text-xl font-bold text-white mb-2">Waterless Cooling</h4>
+                                <p class="text-gray-500 text-sm leading-relaxed">We utilize advanced closed-loop systems, preserving millions of gallons of local freshwater resources annually.</p>
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-tree text-2xl text-glacia-green mb-4"></i>
+                                <h4 class="text-xl font-bold text-white mb-2">Wildlife Protection</h4>
+                                <p class="text-gray-500 text-sm leading-relaxed">Campuses are designed with migration corridors and low-impact lighting to ensure native fauna remains undisturbed.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="netzero" class="py-32 bg-glacia-dark border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="text-center mb-20">
+                    <h2 class="text-glacia-blue font-bold uppercase tracking-widest text-sm mb-4">Engineering for the Planet</h2>
+                    <h3 class="text-4xl md:text-6xl font-extrabold tracking-tighter mb-6">Net Zero Technology.<br>Circular Economy.</h3>
+                    <p class="text-gray-400 max-w-2xl mx-auto font-light text-lg">
+                        True sustainability goes beyond renewable energy. We implement holistic, climate-positive engineering designed to give back to the grid and the environment.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-glacia-card p-10 rounded-3xl border border-white/5 hover:-translate-y-2 transition duration-500 shadow-xl group">
+                        <h3 class="text-5xl font-black text-glacia-blue mb-4 group-hover:scale-110 origin-left transition">1.1</h3>
+                        <h4 class="text-xl font-bold text-white mb-3">Industry Best PUE</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed">Achieving near-perfect Power Usage Effectiveness through outside ambient air and revolutionary liquid cooling integrations.</p>
+                    </div>
+                    <div class="bg-glacia-card p-10 rounded-3xl border border-white/5 hover:-translate-y-2 transition duration-500 shadow-xl group">
+                        <h3 class="text-5xl font-black text-glacia-green mb-4 group-hover:scale-110 origin-left transition">100%</h3>
+                        <h4 class="text-xl font-bold text-white mb-3">Heat Reuse System</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed">Waste heat generated by AI servers is captured and redirected to local municipalities for district heating and greenhouse farming.</p>
+                    </div>
+                    <div class="bg-glacia-card p-10 rounded-3xl border border-white/5 hover:-translate-y-2 transition duration-500 shadow-xl group">
+                        <h3 class="text-5xl font-black text-white mb-4 group-hover:scale-110 origin-left transition">&lt;0</h3>
+                        <h4 class="text-xl font-bold text-white mb-3">Carbon Positive Build</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed">By utilizing cross-laminated timber (CLT) and green concrete, our physical structures sequester more carbon than they emit during construction.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 bg-[#080C14] overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="mb-16 text-center">
+                    <h3 class="text-3xl font-extrabold tracking-tighter text-gray-300">The Sustainable Intelligence Pipeline</h3>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 relative">
+                    <div class="relative z-10 text-center px-6">
+                        <div class="w-20 h-20 mx-auto bg-glacia-card rounded-2xl flex items-center justify-center border border-white/10 mb-6 shadow-[0_0_20px_rgba(0,210,255,0.1)]">
+                            <i class="fa-solid fa-solar-panel text-3xl text-glacia-blue"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3">1. Stranded Energy</h4>
+                        <p class="text-gray-500 text-sm">Tapping into isolated wind, solar, and hydro grids.</p>
+                    </div>
+                    <div class="relative z-10 text-center px-6">
+                        <div class="w-20 h-20 mx-auto bg-glacia-card rounded-2xl flex items-center justify-center border border-white/10 mb-6 shadow-[0_0_20px_rgba(0,210,255,0.1)]">
+                            <i class="fa-solid fa-microchip text-3xl text-glacia-blue"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3">2. High-Density Compute</h4>
+                        <p class="text-gray-500 text-sm">Processing massive LLMs with sub-zero natural cooling.</p>
+                    </div>
+                    <div class="relative z-10 text-center px-6">
+                        <div class="w-20 h-20 mx-auto bg-glacia-card rounded-2xl flex items-center justify-center border border-white/10 mb-6 shadow-[0_0_20px_rgba(0,210,255,0.1)]">
+                            <i class="fa-solid fa-earth-americas text-3xl text-glacia-blue"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-white mb-3">3. Zero-Carbon Output</h4>
+                        <p class="text-gray-500 text-sm">Delivering AI breakthroughs without the carbon footprint.</p>
+                    </div>
+                    <div class="hidden lg:block absolute top-[40px] left-[16%] w-[68%] z-0 opacity-40">
+                        <div class="pipeline-line"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solutions" class="py-32 bg-glacia-dark border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                    <div class="max-w-2xl">
+                        <h2 class="text-glacia-blue font-bold uppercase tracking-widest text-sm mb-4">Solutions</h2>
+                        <h3 class="text-4xl md:text-6xl font-extrabold tracking-tighter">Enterprise Infrastructure <br>for the AI Age.</h3>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-glacia-card p-10 rounded-3xl border border-white/5 hover:bg-glacia-accent transition duration-500 group cursor-pointer">
+                        <div class="flex justify-between items-start mb-12">
+                            <div class="w-16 h-16 bg-glacia-blue/10 rounded-2xl flex items-center justify-center text-glacia-blue text-2xl font-bold">01</div>
+                            <i class="fa-solid fa-building-circle-check text-gray-600 text-3xl group-hover:text-glacia-blue transition"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Site Development</h4>
+                        <p class="text-gray-500 leading-relaxed">End-to-end development of mega-scale data center campuses in locations with abundant renewable energy resources.</p>
+                    </div>
+                    <div class="bg-glacia-card p-10 rounded-3xl border border-white/5 hover:bg-glacia-accent transition duration-500 group cursor-pointer">
+                        <div class="flex justify-between items-start mb-12">
+                            <div class="w-16 h-16 bg-glacia-blue/10 rounded-2xl flex items-center justify-center text-glacia-blue text-2xl font-bold">02</div>
+                            <i class="fa-solid fa-server text-gray-600 text-3xl group-hover:text-glacia-blue transition"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold mb-4 uppercase tracking-tighter">AI-Optimized Architecture</h4>
+                        <p class="text-gray-500 leading-relaxed">Consulting on high-density power distribution and direct-to-chip liquid cooling systems designed specifically for next-gen clusters.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="company" class="py-32 bg-[#080C14]">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    <div class="w-full lg:w-1/2">
+                        <h2 class="text-sm font-bold tracking-widest text-glacia-blue uppercase mb-4">About Us</h2>
+                        <h3 class="text-4xl md:text-5xl font-extrabold tracking-tighter mb-8">Bridging the Gap Between Heavy AI and Ecology</h3>
+                        <p class="text-gray-400 text-lg mb-6 leading-relaxed font-light">
+                            GLACIA31 is a premier developer and consulting firm at the intersection of artificial intelligence and environmental responsibility.
+                        </p>
+                        <p class="text-gray-400 text-lg mb-8 leading-relaxed font-light">
+                            Our team of engineers and energy specialists work with top-tier enterprises globally to design, build, and optimize digital fortresses that run faster, cooler, and greener.
+                        </p>
+                    </div>
+                    <div class="w-full lg:w-1/2 relative h-[500px] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10">
+                        <div class="absolute inset-0 company-bg hover:scale-105 transition duration-700"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-8 left-8 right-8">
+                            <div class="bg-black/40 backdrop-blur-md p-6 rounded-2xl border border-white/10">
+                                <h4 class="text-xl font-bold text-white mb-2 tracking-tight">Global Operations</h4>
+                                <p class="text-gray-300 text-sm flex items-center gap-2"><i class="fa-solid fa-building text-glacia-blue"></i>Delivering Net-Zero AI Infrastructure Worldwide</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-black py-20 border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
+                    <div>
+                        <a href="#home" class="flex items-center gap-2 mb-8 text-shadow-strong">
+                            <i class="fa-solid fa-snowflake text-glacia-blue text-2xl"></i>
+                            <span class="font-extrabold text-2xl tracking-tighter uppercase">GLACIA<span class="text-glacia-blue">31</span></span>
+                        </a>
+                        <p class="text-gray-500 max-w-sm leading-relaxed">Building the foundations for a sustainable digital intelligence era.</p>
+                    </div>
+                    <div class="flex flex-col items-start lg:items-end">
+                        <p class="text-white font-bold mb-4 tracking-widest uppercase text-sm">Headquarters</p>
+                        <p class="text-gray-500 text-sm lg:text-right leading-loose">
+                            1007 N Orange St. 4th Floor, 5471<br>
+                            Wilmington, DE 19801, New Castle, US
+                        </p>
+                        <a href="mailto:glacia31llc@gmail.com" class="text-glacia-blue font-bold mt-6 hover:text-white transition underline underline-offset-8">glacia31llc@gmail.com</a>
+                    </div>
+                </div>
+                <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold text-gray-600 uppercase tracking-widest">
+                    <p>&copy; 2024 GLACIA31 LLC. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+    </div> <script type="module">
+        import * as THREE from 'three';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+        import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+        // Smooth Scrolling setup (Lenis)
+        const lenis = new Lenis({ duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+        gsap.registerPlugin(ScrollTrigger);
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => lenis.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0, 0);
+
+        // Three.js Scene Setup
+        const canvas = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x02040A, 0.002);
+
+        const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.5, 4000);
+        
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.3;
+
+        // Post Processing (Bloom)
+        const renderScene = new RenderPass(scene, camera);
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.0, 0.4, 0.85);
+        bloomPass.threshold = 0.7; bloomPass.strength = 1.0; bloomPass.radius = 0.5;
+        
+        const composer = new EffectComposer(renderer);
+        composer.addPass(renderScene); composer.addPass(bloomPass); composer.addPass(new OutputPass());
+
+        // Lighting
+        scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+        scene.add(new THREE.HemisphereLight(0xe0f7ff, 0x02040A, 0.5));
+        const mainSun = new THREE.DirectionalLight(0xffffff, 2.5);
+        mainSun.position.set(200, 400, 200); mainSun.castShadow = true;
+        mainSun.shadow.mapSize.width = 4096; mainSun.shadow.mapSize.height = 4096;
+        scene.add(mainSun);
+
+        // Materials
+        const matWhite = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.1, metalness: 0.2, clearcoat: 1.0 });
+        const matWhiteTrans = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.1, metalness: 0.2, transparent: true, opacity: 1.0, depthWrite: false });
+        const matTurbineShell = matWhiteTrans.clone();
+        const matRackShell = matWhiteTrans.clone();
+
+        const matDarkMetal = new THREE.MeshStandardMaterial({ color: 0x33333b, roughness: 0.6, metalness: 0.8 });
+        const matSteel = new THREE.MeshStandardMaterial({ color: 0x9999a0, roughness: 0.3, metalness: 0.9 });
+        const matCopper = new THREE.MeshStandardMaterial({ color: 0xc88343, roughness: 0.3, metalness: 1.0 });
+        
+        const matPCB = new THREE.MeshStandardMaterial({ color: 0x1b3323, roughness: 0.6, metalness: 0.4 });
+        const matSilicon = new THREE.MeshPhysicalMaterial({ color: 0x222222, roughness: 0.0, metalness: 0.8, clearcoat: 1.0 });
+
+        const matCoolBlue = new THREE.MeshPhysicalMaterial({ color: 0x0055ff, transmission: 0.9, transparent: true, roughness: 0.1 });
+        const matCoolRed = new THREE.MeshPhysicalMaterial({ color: 0xff2200, transmission: 0.9, transparent: true, roughness: 0.1 });
+        
+        const matGlowCyan = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x00D2FF, emissiveIntensity: 1.5 });
+        const matGlowOrange = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0xffaa00, emissiveIntensity: 2.0 });
+        const matGlowGreen = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x76b900, emissiveIntensity: 2.5 });
+
+        const animated = { turbineShell: null, bessWalls: [], bessRoof: null, heroBridge: null, nvlinkSpine: null, manifolds: null, otherTrays: [] };
+        let turbineRotor, mainShaft;
+
+        // --- Model Creation Functions ---
+        function createTurbine() {
+            const group = new THREE.Group();
+            const tower = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 6, 160, 64), matWhite);
+            tower.position.y = 80; tower.castShadow = true; group.add(tower);
+            const nacelle = new THREE.Group(); nacelle.position.y = 160; group.add(nacelle);
+
+            mainShaft = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 6, 32), matSteel);
+            mainShaft.rotation.x = Math.PI / 2; mainShaft.position.set(0, 0, 3);
+            const gearbox = new THREE.Mesh(new THREE.BoxGeometry(3.5, 3.5, 4.5), matDarkMetal); gearbox.position.set(0, 0, -1);
+            const generator = new THREE.Mesh(new THREE.CylinderGeometry(3, 3, 3.5, 32), matCopper);
+            generator.rotation.x = Math.PI / 2; generator.position.set(0, 0, -5.5);
+            
+            nacelle.add(mainShaft, gearbox, generator);
+
+            animated.turbineShell = new THREE.Mesh(new THREE.CapsuleGeometry(4.2, 14, 32, 64), matTurbineShell);
+            animated.turbineShell.rotation.x = Math.PI / 2; animated.turbineShell.position.set(0, 0, -1);
+            animated.turbineShell.castShadow = true; nacelle.add(animated.turbineShell);
+
+            turbineRotor = new THREE.Group(); turbineRotor.position.set(0, 160, 6); group.add(turbineRotor);
+            const hub = new THREE.Mesh(new THREE.SphereGeometry(3, 32, 32), matWhite); hub.scale.set(1, 1, 1.4); turbineRotor.add(hub);
+
+            for(let i=0; i<3; i++) {
+                const bladeGeo = new THREE.CylinderGeometry(0.3, 2, 75, 32); bladeGeo.scale(1, 1, 0.1); bladeGeo.translate(0, 37.5, 0); 
+                const blade = new THREE.Mesh(bladeGeo, matWhite); blade.rotation.y = 0.2; blade.castShadow = true;
+                const pivot = new THREE.Group(); pivot.rotation.z = (i * Math.PI * 2) / 3; pivot.add(blade); turbineRotor.add(pivot);
+            }
+            return group;
+        }
+
+        function createBESS() {
+            const group = new THREE.Group();
+            const base = new THREE.Mesh(new THREE.BoxGeometry(6, 0.5, 18), matDarkMetal); base.position.y = 0.25; group.add(base);
+
+            const createCorrugatedWall = (w, h, d) => {
+                const wall = new THREE.Group();
+                const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), matWhite); wall.add(b);
+                const numRibs = Math.floor(w / 0.4);
+                const ribs = new THREE.InstancedMesh(new THREE.BoxGeometry(0.2, h, d+0.1), matWhite, numRibs);
+                const dummy = new THREE.Object3D();
+                for(let i=0; i<numRibs; i++) { dummy.position.set(-w/2 + 0.2 + i*0.4, 0, 0); dummy.updateMatrix(); ribs.setMatrixAt(i, dummy.matrix); }
+                ribs.instanceMatrix.needsUpdate = true; wall.add(ribs); return wall;
+            }
+
+            const wallL = createCorrugatedWall(18, 5.5, 0.2); wallL.position.set(-2.9, 3.25, 0); wallL.rotation.y = Math.PI/2;
+            const wallR = createCorrugatedWall(18, 5.5, 0.2); wallR.position.set(2.9, 3.25, 0); wallR.rotation.y = Math.PI/2;
+            const wallB = createCorrugatedWall(5.8, 5.5, 0.2); wallB.position.set(0, 3.25, -8.9);
+            const wallF = createCorrugatedWall(5.8, 5.5, 0.2); wallF.position.set(0, 3.25, 8.9);
+            animated.bessWalls.push(wallL, wallR, wallB, wallF); group.add(wallL, wallR, wallB, wallF);
+
+            animated.bessRoof = new THREE.Group(); animated.bessRoof.position.set(0, 6.1, 0);
+            animated.bessRoof.add(new THREE.Mesh(new THREE.BoxGeometry(6.2, 0.4, 18.2), matWhite));
+            for(let i=0; i<4; i++) {
+                const hvac = new THREE.Mesh(new THREE.BoxGeometry(3, 1, 3), matSteel); hvac.position.set(0, 0.7, -6 + i*4);
+                animated.bessRoof.add(hvac);
+            }
+            group.add(animated.bessRoof);
+
+            for(let r=0; r<12; r++) {
+                for(let c of [-1, 1]) {
+                    const rack = new THREE.Mesh(new THREE.BoxGeometry(1.6, 5, 1.2), matSteel); rack.position.set(c * 1.5, 3, -7.5 + r*1.35);
+                    const led = new THREE.Mesh(new THREE.BoxGeometry(0.1, 4.5, 0.1), matGlowOrange); led.position.set(c > 0 ? -0.8 : 0.8, 0, 0); rack.add(led);
+                    group.add(rack);
+                }
+            }
+            return group;
+        }
+
+        function createComputeScaleUp() {
+            const group = new THREE.Group();
+            
+            const frame = new THREE.Mesh(new THREE.BoxGeometry(3.2, 13.8, 5), new THREE.MeshStandardMaterial({ color: 0x444444, wireframe: true }));
+            frame.position.y = 7; group.add(frame);
+            
+            animated.nvlinkSpine = new THREE.Mesh(new THREE.BoxGeometry(2.4, 13, 0.6), matCopper);
+            animated.nvlinkSpine.position.set(0, 25, -2.2); group.add(animated.nvlinkSpine);
+
+            animated.manifolds = new THREE.Group();
+            const pipeBlue = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 13.5, 16), matCoolBlue); pipeBlue.position.set(-1.2, 7, 2);
+            const pipeRed = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 13.5, 16), matCoolRed); pipeRed.position.set(1.2, 7, 2);
+            animated.manifolds.add(pipeBlue, pipeRed);
+            animated.manifolds.position.y = 25;
+            group.add(animated.manifolds);
+
+            for(let i=0; i<18; i++) {
+                const tray = new THREE.Group(); 
+                const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.2, 3.8), matDarkMetal);
+                const bridge = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.3, 0.4), matCopper); 
+                bridge.position.set(0, 0.15, -1.7);
+                
+                for(let gx=-1; gx<=1; gx+=2) {
+                    for(let gz=-1; gz<=1; gz+=2) {
+                        const gpuGrp = new THREE.Group();
+                        gpuGrp.position.set(gx * 0.7, 0.15, gz * 0.8);
+                        
+                        const pcb = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.05, 1.2), matPCB);
+                        const die = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.5), matSilicon); die.position.y = 0.05;
+                        const glowEdge = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.02, 0.52), matGlowGreen); glowEdge.position.y = 0.05;
+                        
+                        for(let h=-1; h<=1; h+=2) {
+                            const hbm = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.08, 0.5), matDarkMetal); hbm.position.set(h * 0.35, 0.05, 0); gpuGrp.add(hbm);
+                        }
+                        
+                        const coldPlate = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.1, 1.0), matCopper); coldPlate.position.y = 0.15;
+                        gpuGrp.add(pcb, die, glowEdge, coldPlate); tray.add(gpuGrp);
+                    }
+                }
+                
+                const ledGrp = new THREE.Group(); ledGrp.position.set(0, 0.1, 1.91);
+                for(let j=0; j<4; j++) {
+                    const led = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.05, 0.1), matGlowGreen); led.position.set(-0.9 + j*0.6, 0, 0); ledGrp.add(led);
+                }
+                
+                tray.add(chassis, bridge, ledGrp);
+                
+                if (i === 9) {
+                    animated.heroBridge = bridge;
+                    bridge.position.z = -5;
+                    tray.position.set(0, 1.0 + i*0.7, 0);
+                } else {
+                    animated.otherTrays.push(tray);
+                    tray.position.set(0, 1.0 + i*0.7, 6);
+                }
+                group.add(tray); 
+            }
+            return group;
+        }
+
+        // Layout Config
+        const posTurbine = { x: 0, y: 0, z: 0 };
+        const posBess = { x: 400, y: 0, z: -400 };
+        const posDc = { x: 800, y: 0, z: -800 };
+
+        const turbine = createTurbine(); turbine.position.set(posTurbine.x, posTurbine.y, posTurbine.z); scene.add(turbine);
+        const bess = createBESS(); bess.position.set(posBess.x, posBess.y, posBess.z); scene.add(bess);
+        const dc = createComputeScaleUp(); dc.position.set(posDc.x, posDc.y, posDc.z); scene.add(dc);
+
+        // Background Instanced Meshes
+        const dummyBg = new THREE.Object3D();
+        
+        let validBessCount = 0;
+        for(let r=0; r<10; r++) { for(let c=0; c<10; c++) { if(!(r===5 && c===5)) validBessCount++; } }
+        const bgBessIMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(6, 6.1, 18), matWhite, validBessCount);
+        let bIdx = 0;
+        for(let r=0; r<10; r++) {
+            for(let c=0; c<10; c++) {
+                if(r===5 && c===5) continue;
+                dummyBg.position.set(posBess.x + (c-5)*12, 3.05, posBess.z + (r-5)*24); dummyBg.updateMatrix(); bgBessIMesh.setMatrixAt(bIdx++, dummyBg.matrix);
+            }
+        }
+        bgBessIMesh.instanceMatrix.needsUpdate = true; scene.add(bgBessIMesh);
+
+        const bgRackGroup = new THREE.Group();
+        bgRackGroup.position.y = -20;
+        
+        let validRackCount = 0;
+        for(let r=0; r<4; r++) { for(let c=0; c<60; c++) { if(!(r===1 && c===30) && !(r===2 && c===30)) validRackCount++; } }
+        const bgRackIMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(3.2, 14, 5.2), matDarkMetal, validRackCount);
+        const bgLedIMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.1, 13, 0.1), matGlowGreen, validRackCount);
+        
+        let rIdx = 0;
+        for(let r=0; r<4; r++) {
+            const sideX = (r < 2) ? -1 : 1;
+            const aisleX = (r % 2 === 0) ? -2 : 2;
+            for(let c=0; c<60; c++) {
+                if((r===1 || r===2) && c===30) continue;
+                const px = posDc.x + sideX*12 + aisleX*4;
+                const pz = posDc.z + (c-30)*6;
+                dummyBg.position.set(px, 7, pz); dummyBg.updateMatrix(); bgRackIMesh.setMatrixAt(rIdx, dummyBg.matrix);
+                dummyBg.position.set(px, 7, pz + 2.6); dummyBg.updateMatrix(); bgLedIMesh.setMatrixAt(rIdx, dummyBg.matrix);
+                rIdx++;
+            }
+        }
+        bgRackIMesh.instanceMatrix.needsUpdate = true; bgLedIMesh.instanceMatrix.needsUpdate = true;
+        bgRackGroup.add(bgRackIMesh, bgLedIMesh); scene.add(bgRackGroup);
+
+        // Loading Screen Management
+        let loaderRemoved = false;
+        function removeLoader() {
+            if (loaderRemoved) return;
+            const loader = document.getElementById('loader');
+            if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 1000); }
+            loaderRemoved = true;
+        }
+        window.addEventListener('load', () => setTimeout(removeLoader, 800));
+        setTimeout(removeLoader, 3500); 
+
+        // Camera and Animation Loop
+        const clock = new THREE.Clock();
+        camera.position.set(-60, 180, 80);
+        const cameraTarget = new THREE.Vector3(0, 160, 0);
+        const proxyTarget = { x: 0, y: 160, z: 0 };
+        const tmpTarget = new THREE.Vector3();
+
+        let isSectionVisible = true;
+        const observer = new IntersectionObserver((entries) => { entries.forEach(e => isSectionVisible = e.isIntersecting); }, { threshold: 0 });
+        const archSection = document.getElementById('architecture');
+        if (archSection) observer.observe(archSection);
+
+        let frameCount = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            frameCount++;
+            if (!isSectionVisible && frameCount > 10) return; 
+            if (frameCount === 5) removeLoader();
+
+            const time = clock.getElapsedTime();
+
+            tmpTarget.set(proxyTarget.x, proxyTarget.y, proxyTarget.z);
+            cameraTarget.lerp(tmpTarget, 0.08);
+            camera.lookAt(cameraTarget);
+
+            if (turbineRotor) turbineRotor.rotation.z -= 0.03;
+            if (mainShaft) mainShaft.rotation.z -= 0.03;
+
+            if (matGlowGreen) matGlowGreen.emissiveIntensity = 1.5 + Math.max(0, Math.sin(time * 5)) * 2.0;
+            if (matGlowOrange) matGlowOrange.emissiveIntensity = 1.0 + Math.max(0, Math.sin(time * 3)) * 1.5;
+
+            try { composer.render(); } catch(e) { renderer.render(scene, camera); }
+        }
+        animate(); 
+
+        // GSAP UI Animations
+        gsap.utils.toArray('.gs-card').forEach((card) => {
+            gsap.fromTo(card, { opacity: 0, y: 50 }, {
+                scrollTrigger: { trigger: card.parentElement, start: "top 60%", end: "bottom 30%", toggleActions: "play reverse play reverse" },
+                opacity: 1, y: 0, duration: 1.2, ease: "power3.out"
+            });
+        });
+
+        // GSAP 3D Camera Timeline (Triggered ONLY in #architecture section)
+        const tl = gsap.timeline({ scrollTrigger: { trigger: "#architecture", start: "top top", end: "bottom bottom", scrub: 1.5 } });
+
+        tl.to(camera.position, { x: 35, y: 175, z: -40, ease: "power1.inOut" }, 0)
+          .to(proxyTarget, { x: 0, y: 160, z: 0, ease: "power1.inOut" }, 0)
+          .to(animated.turbineShell.position, { y: 15, ease: "power2.inOut" }, 0.2)
+          .to(matTurbineShell, { opacity: 0.15, duration: 0.5 }, 0.2);
+
+        tl.to(camera.position, { x: posBess.x + 50, y: 25, z: posBess.z - 50, ease: "power2.inOut" }, 1)
+          .to(proxyTarget, { x: posBess.x, y: 8, z: posBess.z, ease: "power2.inOut" }, 1)
+          .to(animated.bessRoof.position, { y: 12, ease: "power2.inOut" }, 1.3)
+          .to(animated.bessWalls[0].position, { x: -10, ease: "power2.inOut" }, 1.3)
+          .to(animated.bessWalls[1].position, { x: 10, ease: "power2.inOut" }, 1.3)
+          .to(animated.bessWalls[2].position, { z: -16, ease: "power2.inOut" }, 1.3)
+          .to(animated.bessWalls[3].position, { z: 16, ease: "power2.inOut" }, 1.3);
+
+        const heroTrayY = 1.0 + 9 * 0.7;
+        tl.to(camera.position, { x: posDc.x - 0.2, y: heroTrayY + 0.6, z: posDc.z + 1.2, ease: "power1.inOut" }, 2)
+          .to(proxyTarget, { x: posDc.x, y: heroTrayY + 0.2, z: posDc.z, ease: "power1.inOut" }, 2);
+
+        tl.to(camera.position, { x: posDc.x + 3.5, y: heroTrayY + 2.5, z: posDc.z + 4.5, ease: "power2.inOut" }, 3)
+          .to(proxyTarget, { x: posDc.x, y: heroTrayY, z: posDc.z, ease: "power2.inOut" }, 3)
+          .to(animated.heroBridge.position, { z: -1.7, ease: "back.out(1.2)", duration: 0.5 }, 3.2);
+
+        tl.to(camera.position, { x: posDc.x + 12, y: 14, z: posDc.z + 16, ease: "power2.inOut" }, 4)
+          .to(proxyTarget, { x: posDc.x, y: 7, z: posDc.z, ease: "power2.inOut" }, 4)
+          .to(animated.nvlinkSpine.position, { y: 7, ease: "power2.out", duration: 0.6 }, 4.1)
+          .to(animated.manifolds.position, { y: 0, ease: "power2.out", duration: 0.6 }, 4.2);
+          
+        animated.otherTrays.forEach((tray, idx) => {
+            tl.to(tray.position, { z: 0, ease: "back.out(1.2)" }, 4.3 + (idx * 0.02));
+        });
+
+        tl.to(camera.position, { x: posDc.x + 15, y: 15, z: posDc.z + 130, ease: "power2.inOut" }, 5)
+          .to(proxyTarget, { x: posDc.x, y: 7, z: posDc.z - 150, ease: "power2.inOut" }, 5)
+          .to(bgRackGroup.position, { y: 0, ease: "power2.out", duration: 1.0 }, 5.2);
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
