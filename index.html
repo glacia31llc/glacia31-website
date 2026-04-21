@@ -43,7 +43,7 @@
     </script>
     
     <style>
-        /* Combined Styles (Original 복구) */
+        /* Combined Styles */
         html { scroll-behavior: smooth; }
         section { scroll-margin-top: 5rem; }
         
@@ -62,11 +62,11 @@
         .content-layer { position: relative; z-index: 10; }
         .transparent-section { background-color: transparent; position: relative; }
         
-        /* Blending gradients for 3D section (Original 테마 컬러 적용) */
+        /* Blending gradients for 3D section */
         .blend-top { position: absolute; top: 0; left: 0; width: 100%; height: 250px; background: linear-gradient(to bottom, #050810, transparent); pointer-events: none; z-index: -1; }
         .blend-bottom { position: absolute; bottom: 0; left: 0; width: 100%; height: 250px; background: linear-gradient(to top, #050810, transparent); pointer-events: none; z-index: -1; }
 
-        /* Loader Styles (Original) */
+        /* Loader Styles */
         #loader {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #02040A; z-index: 9999;
@@ -76,7 +76,7 @@
         .spinner { width: 50px; height: 50px; border: 3px solid rgba(118, 185, 0, 0.1); border-top: 3px solid #76b900; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 24px; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* General UI Backgrounds (Original) */
+        /* General UI Backgrounds */
         .hero-bg {
             background-image: url('patagonia_datacenter.png');
             background-size: cover; background-position: center; background-attachment: fixed;
@@ -97,7 +97,7 @@
         .text-shadow-strong { text-shadow: 0px 4px 20px rgba(0, 0, 0, 0.8); }
         .glass-nav { background: rgba(5, 8, 16, 0.7); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
 
-        /* Architecture Section Cards (Original 화려한 테마 유지) */
+        /* Architecture Section Cards */
         .step {
             height: 160vh;
             display: flex; flex-direction: column; justify-content: center;
@@ -132,7 +132,7 @@
         .tech-specs span { display: block; margin-bottom: 0.5rem; }
         .tech-specs strong { color: #e2e8f0; }
 
-        /* Custom UI Elements (Original) */
+        /* Custom UI Elements */
         .gradient-text { background: linear-gradient(to right, #00D2FF, #ffffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .pipeline-line {
             height: 2px; background: linear-gradient(90deg, transparent, #00D2FF, transparent); background-size: 200% 100%;
@@ -217,11 +217,11 @@
                 <div id="step-wind" class="step items-start">
                     <div class="glass-card-3d gs-card border-blue pointer-events-auto">
                         <span class="tagline tag-blue">Phase 01 | Power Generation</span>
-                        <h2>Ultra-Capacity<br>Onshore Drivetrain.</h2>
-                        <p>An uncompromising feat of heavy industrial engineering. Designed for extreme environments, our megawatt-class drivetrain features a precision-machined cast-iron planetary gearbox and a high-density synchronous generator, extracting absolute maximum kinetic yield from glacial wind shear.</p>
+                        <h2>Ultra-Capacity<br>Onshore Wind Power.</h2>
+                        <p>Through advanced digital twin modeling of onshore wind facilities, we engineer state-of-the-art gigawatt-class renewable energy systems. Integrating over 50 years of predictive climate analysis, we design Tier-4 equivalent, fault-tolerant islanded microgrids, fully independent power architectures.</p>
                         <div class="tech-specs">
-                            <span><strong>Drivetrain:</strong> Exploded View - Cast Iron Gearbox & Machined Steel Bearing</span>
-                            <span><strong>Rotor:</strong> Industrial Matte Finish Airfoil with Pre-Bend Topology</span>
+                            <span><strong>Modeling:</strong> Digital Twin & 50-Year Climate Analysis</span>
+                            <span><strong>Architecture:</strong> Tier-4+ Independent Power Grid</span>
                         </div>
                     </div>
                 </div>
@@ -230,18 +230,18 @@
                     <div class="glass-card-3d gs-card border-orange pointer-events-auto">
                         <span class="tagline tag-orange">Phase 02 | Storage</span>
                         <h2>Utility-Scale<br>BESS Vault.</h2>
-                        <p>Industrial-grade, liquid-cooled lithium-ion arrays stored in fortified corrugated steel vaults. These systems buffer gigawatts of surplus energy, guaranteeing 100% flawless grid stability for critical AI clusters under extreme computational loads.</p>
+                        <p>Our utility-scale Battery Energy Storage Systems mitigate renewable energy intermittency and ensure frequency stabilization, delivering uninterrupted power to critical AI data centers. Powered by AI-driven algorithms, the system actively counteracts lithium plating in extreme climates, vastly extending operational lifespan and reliability.</p>
                     </div>
                 </div>
                 
                 <div id="step-ai-gpu" class="step items-start">
                     <div class="glass-card-3d gs-card border-green pointer-events-auto">
                         <span class="tagline tag-green">Scale 1X | Compute Node</span>
-                        <h2>Exascale AI<br>Accelerator Sled.</h2>
-                        <p>The foundation of exascale AI. Featuring an advanced ultra-tier AI architecture mounted on a high-density PCB with extreme thermal conductive direct-to-chip cold plates.</p>
+                        <h2>Exascale AI<br>Supercomputing.</h2>
+                        <p>Integrating NVIDIA's latest Blackwell GPU architecture with custom AI accelerators, we deploy unparalleled AI compute capabilities. Leveraging an advanced Compute Arbitrage framework, we seamlessly orchestrate hybrid architectures perfectly optimized for intensive AI training and ultra-low latency inference.</p>
                         <div class="tech-specs">
-                            <span><strong>Architecture:</strong> High-Density Tensor Subsystem</span>
-                            <span><strong>Thermal:</strong> Direct-to-Chip Cold Plates</span>
+                            <span><strong>Hardware:</strong> NVIDIA Blackwell GPUs & Google TPUs</span>
+                            <span><strong>Orchestration:</strong> Compute Arbitrage for Training & Inference</span>
                         </div>
                     </div>
                 </div>
@@ -249,11 +249,11 @@
                 <div id="step-ai-tray" class="step items-end">
                     <div class="glass-card-3d gs-card border-green pointer-events-auto">
                         <span class="tagline tag-green">Scale 18X | Interconnect</span>
-                        <h2>High-Bandwidth<br>Copper Backplane.</h2>
-                        <p>The system scales vertically. Multiple compute nodes integrate into a high-density sled, while massive copper switch spines drop in for bidirectional terabyte-per-second communication.</p>
+                        <h2>High-Bandwidth<br>Network Fabric.</h2>
+                        <p>Engineered to seamlessly support NVLink, advanced interconnection buses, and bidirectional terabyte-per-second communication. Our architecture actively mitigates the immense thermal output of massive data transfers while exponentially expanding overall network bandwidth.</p>
                         <div class="tech-specs">
-                            <span><strong>Interconnect:</strong> Ultra-Fast Network Fabric</span>
-                            <span><strong>Integration:</strong> Seamless Copper Bridging</span>
+                            <span><strong>Interconnect:</strong> NVLink & High-Speed Bus Architecture</span>
+                            <span><strong>Performance:</strong> Thermal Mitigation & Bandwidth Expansion</span>
                         </div>
                     </div>
                 </div>
@@ -261,8 +261,8 @@
                 <div id="step-ai-rack" class="step items-start">
                     <div class="glass-card-3d gs-card border-blue pointer-events-auto">
                         <span class="tagline tag-blue">Scale 72X | Infrastructure</span>
-                        <h2>600kW DLC<br>Super-Rack.</h2>
-                        <p>The full compute rack enclosure assembles. Advanced Direct Liquid Cooling (DLC) manifolds drop down to circulate chilled fluid and extract extreme heat.</p>
+                        <h2>600kW DLC<br>Super-Pod.</h2>
+                        <p>The full compute enclosures assemble into a high-density super-pod. Advanced Direct Liquid Cooling (DLC) manifolds drop down to circulate chilled fluid and extract extreme heat.</p>
                         <div class="tech-specs">
                             <span><strong>Infrastructure:</strong> Advanced High-Density Coolant Distribution</span>
                             <span><strong>Power:</strong> &gt;120kW per Rack Chassis</span>
@@ -376,7 +376,7 @@
                     </div>
                     <div class="bg-glacia-card p-10 rounded-3xl border border-white/5 hover:-translate-y-2 transition duration-500 shadow-xl group">
                         <h3 class="text-5xl font-black text-white mb-4 group-hover:scale-110 origin-left transition">&lt;0</h3>
-                        <h4 class="text-xl font-bold text-white mb-3">Carbon Positive Build</h4>
+                        <h4 class="text-xl font-bold text-white mb-3">Carbon Negative Build</h4>
                         <p class="text-gray-500 text-sm leading-relaxed">By utilizing cross-laminated timber (CLT) and green concrete, our physical structures sequester more carbon than they emit during construction.</p>
                     </div>
                 </div>
