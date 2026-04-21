@@ -43,7 +43,7 @@
     </script>
     
     <style>
-        /* Combined Styles */
+        /* Combined Styles (Original 복구) */
         html { scroll-behavior: smooth; }
         section { scroll-margin-top: 5rem; }
         
@@ -62,11 +62,11 @@
         .content-layer { position: relative; z-index: 10; }
         .transparent-section { background-color: transparent; position: relative; }
         
-        /* Blending gradients for 3D section */
+        /* Blending gradients for 3D section (Original 테마 컬러 적용) */
         .blend-top { position: absolute; top: 0; left: 0; width: 100%; height: 250px; background: linear-gradient(to bottom, #050810, transparent); pointer-events: none; z-index: -1; }
         .blend-bottom { position: absolute; bottom: 0; left: 0; width: 100%; height: 250px; background: linear-gradient(to top, #050810, transparent); pointer-events: none; z-index: -1; }
 
-        /* Loader Styles */
+        /* Loader Styles (Original) */
         #loader {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #02040A; z-index: 9999;
@@ -76,7 +76,7 @@
         .spinner { width: 50px; height: 50px; border: 3px solid rgba(118, 185, 0, 0.1); border-top: 3px solid #76b900; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 24px; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* General UI Backgrounds */
+        /* General UI Backgrounds (Original) */
         .hero-bg {
             background-image: url('patagonia_datacenter.png');
             background-size: cover; background-position: center; background-attachment: fixed;
@@ -97,7 +97,7 @@
         .text-shadow-strong { text-shadow: 0px 4px 20px rgba(0, 0, 0, 0.8); }
         .glass-nav { background: rgba(5, 8, 16, 0.7); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
 
-        /* Architecture Section Cards */
+        /* Architecture Section Cards (Original 화려한 테마 유지) */
         .step {
             height: 160vh;
             display: flex; flex-direction: column; justify-content: center;
@@ -132,7 +132,7 @@
         .tech-specs span { display: block; margin-bottom: 0.5rem; }
         .tech-specs strong { color: #e2e8f0; }
 
-        /* Custom UI Elements */
+        /* Custom UI Elements (Original) */
         .gradient-text { background: linear-gradient(to right, #00D2FF, #ffffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .pipeline-line {
             height: 2px; background: linear-gradient(90deg, transparent, #00D2FF, transparent); background-size: 200% 100%;
@@ -165,7 +165,7 @@
 
     <div class="content-layer">
         
-		<nav class="fixed w-full z-50 glass-nav transition-all duration-300">
+        <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
                 <div class="flex justify-between items-center h-20">
                     <a href="#home" class="flex items-center gap-2 group text-shadow-strong">
@@ -174,7 +174,6 @@
                     </a>
                     <div class="hidden md:flex items-center space-x-8">
                         <a href="#architecture" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Technology</a>
-                        
                         <a href="#vision" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Vision</a>
                         <a href="#environment" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Environment</a>
                         <a href="#netzero" class="text-sm font-semibold text-gray-200 hover:text-glacia-blue transition text-shadow-strong">Net Zero</a>
@@ -217,17 +216,21 @@
                 
                 <div id="step-wind" class="step items-start">
                     <div class="glass-card-3d gs-card border-blue pointer-events-auto">
-                        <span class="tagline tag-blue">Phase 01 | Power</span>
-                        <h2>Ultra-Capacity Onshore<br>Drivetrain.</h2>
-                        <p>Next-generation aerodynamic wind turbines convert high-altitude glacial winds into extreme kinetic power, establishing a zero-carbon foundation.</p>
+                        <span class="tagline tag-blue">Phase 01 | Power Generation</span>
+                        <h2>Ultra-Capacity<br>Onshore Drivetrain.</h2>
+                        <p>An uncompromising feat of heavy industrial engineering. Designed for extreme environments, our megawatt-class drivetrain features a precision-machined cast-iron planetary gearbox and a high-density synchronous generator, extracting absolute maximum kinetic yield from glacial wind shear.</p>
+                        <div class="tech-specs">
+                            <span><strong>Drivetrain:</strong> Exploded View - Cast Iron Gearbox & Machined Steel Bearing</span>
+                            <span><strong>Rotor:</strong> Industrial Matte Finish Airfoil with Pre-Bend Topology</span>
+                        </div>
                     </div>
                 </div>
                 
                 <div id="step-bess" class="step items-end">
                     <div class="glass-card-3d gs-card border-orange pointer-events-auto">
                         <span class="tagline tag-orange">Phase 02 | Storage</span>
-                        <h2>Utility-Scale Megawatt<br>BESS Vault.</h2>
-                        <p>High-density liquid-cooled lithium-ion arrays store gigawatts of surplus energy, guaranteeing 100% flawless grid stability for the AI cluster.</p>
+                        <h2>Utility-Scale<br>BESS Vault.</h2>
+                        <p>Industrial-grade, liquid-cooled lithium-ion arrays stored in fortified corrugated steel vaults. These systems buffer gigawatts of surplus energy, guaranteeing 100% flawless grid stability for critical AI clusters under extreme computational loads.</p>
                     </div>
                 </div>
                 
@@ -271,7 +274,7 @@
                     <div class="glass-card-3d gs-card border-silver mx-auto pointer-events-auto" style="max-width: 650px;">
                         <span class="tagline tag-silver">Scale 10,000X | AI Factory</span>
                         <h2>Enterprise Digital<br>Twin Cluster.</h2>
-                        <p>Hundreds of racks integrate into a colossal AI Factory. Powered entirely by glacial wind and managed via advanced spatial digital twins, this is the ultimate blueprint for sustainable supercomputing.</p>
+                        <p>Hundreds of heavy-duty racks integrate into a colossal AI Factory. Powered entirely by glacial wind and managed via advanced spatial digital twins, this is the ultimate blueprint for sustainable supercomputing.</p>
                         <div class="tech-specs flex justify-center gap-8 mt-4">
                             <span><strong>Total Accelerators:</strong> 32,000+</span>
                             <span><strong>Carbon Footprint:</strong> Absolute Zero</span>
@@ -497,12 +500,15 @@
             </div>
         </footer>
 
-    </div> <script type="module">
+    </div> 
+    
+    <script type="module">
         import * as THREE from 'three';
         import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
         import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
         import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+        import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'; 
 
         // Smooth Scrolling setup (Lenis)
         const lenis = new Lenis({ duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
@@ -511,97 +517,255 @@
         gsap.ticker.add((time) => lenis.raf(time * 1000));
         gsap.ticker.lagSmoothing(0, 0);
 
-        // Three.js Scene Setup
+        // --- Three.js Scene Setup (극사실주의 세팅) ---
         const canvas = document.getElementById('webgl-canvas');
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x02040A, 0.002);
-
-        const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.5, 4000);
         
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" });
+        // 오리지널 배경색(#050810)과 안개를 일치시켜 스크롤 시 이질감 제거
+        scene.fog = new THREE.FogExp2(0x050810, 0.0018);
+
+        // 카메라 화각을 약간 좁혀 거대함을 왜곡 없이 포착
+        const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.5, 4000);
+        
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.3;
+        
+        // 캔버스 배경색을 강제로 오리지널 테마 색상으로 고정
+        renderer.setClearColor(0x050810, 1); 
+        
+        renderer.shadowMap.enabled = true; 
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        
+        // 시네마틱 톤 매핑 설정 (극사실주의 질감 표현)
+        renderer.toneMapping = THREE.ACESFilmicToneMapping; 
+        renderer.toneMappingExposure = 0.9; 
 
-        // Post Processing (Bloom)
+        // PBR 금속 표면 물리 반사를 위한 가상 스튜디오 환경광 생성
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        pmremGenerator.compileEquirectangularShader();
+        scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+
         const renderScene = new RenderPass(scene, camera);
         const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.0, 0.4, 0.85);
-        bloomPass.threshold = 0.7; bloomPass.strength = 1.0; bloomPass.radius = 0.5;
+        bloomPass.threshold = 1.5; // 번짐 억제
+        bloomPass.strength = 0.25; 
+        bloomPass.radius = 0.5;
         
         const composer = new EffectComposer(renderer);
-        composer.addPass(renderScene); composer.addPass(bloomPass); composer.addPass(new OutputPass());
+        composer.addPass(renderScene); 
+        composer.addPass(bloomPass); 
+        composer.addPass(new OutputPass());
 
-        // Lighting
-        scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-        scene.add(new THREE.HemisphereLight(0xe0f7ff, 0x02040A, 0.5));
-        const mainSun = new THREE.DirectionalLight(0xffffff, 2.5);
-        mainSun.position.set(200, 400, 200); mainSun.castShadow = true;
-        mainSun.shadow.mapSize.width = 4096; mainSun.shadow.mapSize.height = 4096;
-        scene.add(mainSun);
+        // --- Cinematic 3-Point Studio Lighting ---
+        scene.add(new THREE.AmbientLight(0xffffff, 0.15)); 
 
-        // Materials
-        const matWhite = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.1, metalness: 0.2, clearcoat: 1.0 });
-        const matWhiteTrans = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.1, metalness: 0.2, transparent: true, opacity: 1.0, depthWrite: false });
-        const matTurbineShell = matWhiteTrans.clone();
-        const matRackShell = matWhiteTrans.clone();
+        const keyLight = new THREE.DirectionalLight(0xfff8f0, 2.5); 
+        keyLight.position.set(150, 200, 100); 
+        keyLight.castShadow = true;
+        keyLight.shadow.mapSize.width = 4096; keyLight.shadow.mapSize.height = 4096; 
+        keyLight.shadow.camera.near = 10; keyLight.shadow.camera.far = 1000;
+        keyLight.shadow.camera.left = -200; keyLight.shadow.camera.right = 200;
+        keyLight.shadow.camera.top = 200; keyLight.shadow.camera.bottom = -200;
+        keyLight.shadow.bias = -0.0005;
+        keyLight.shadow.normalBias = 0.05;
+        scene.add(keyLight);
 
-        const matDarkMetal = new THREE.MeshStandardMaterial({ color: 0x33333b, roughness: 0.6, metalness: 0.8 });
-        const matSteel = new THREE.MeshStandardMaterial({ color: 0x9999a0, roughness: 0.3, metalness: 0.9 });
-        const matCopper = new THREE.MeshStandardMaterial({ color: 0xc88343, roughness: 0.3, metalness: 1.0 });
+        const fillLight = new THREE.DirectionalLight(0x99bbff, 0.6);
+        fillLight.position.set(-150, 50, 150);
+        scene.add(fillLight);
+
+        const rimLight = new THREE.DirectionalLight(0xddf0ff, 2.5);
+        rimLight.position.set(50, 200, -250);
+        scene.add(rimLight);
+
+        // --- Hyper-Realistic Industrial PBR Materials ---
+        const matExterior = new THREE.MeshStandardMaterial({ color: 0xd4d6d8, roughness: 0.65, metalness: 0.15 });
+        const matTurbineShell = new THREE.MeshPhysicalMaterial({ 
+            color: 0xd4d6d8, roughness: 0.65, metalness: 0.15, transparent: true, opacity: 1.0, 
+            transmission: 0.0, ior: 1.5, thickness: 0.8, side: THREE.DoubleSide
+        });
+
+        const matCastIron = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.75, metalness: 0.6 }); 
+        const matMachinedSteel = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.35, metalness: 0.85 }); 
+        const matCopper = new THREE.MeshStandardMaterial({ color: 0xb87333, roughness: 0.45, metalness: 0.95 }); 
         
-        const matPCB = new THREE.MeshStandardMaterial({ color: 0x1b3323, roughness: 0.6, metalness: 0.4 });
-        const matSilicon = new THREE.MeshPhysicalMaterial({ color: 0x222222, roughness: 0.0, metalness: 0.8, clearcoat: 1.0 });
-
-        const matCoolBlue = new THREE.MeshPhysicalMaterial({ color: 0x0055ff, transmission: 0.9, transparent: true, roughness: 0.1 });
-        const matCoolRed = new THREE.MeshPhysicalMaterial({ color: 0xff2200, transmission: 0.9, transparent: true, roughness: 0.1 });
+        const matDarkChassis = new THREE.MeshStandardMaterial({ color: 0x1c1e22, roughness: 0.65, metalness: 0.5 });
+        const matPCB = new THREE.MeshStandardMaterial({ color: 0x111c15, roughness: 0.8, metalness: 0.2 });
+        const matSilicon = new THREE.MeshPhysicalMaterial({ color: 0x111111, roughness: 0.1, metalness: 0.8, clearcoat: 0.6 });
+        const matCoolBlue = new THREE.MeshPhysicalMaterial({ color: 0x1144bb, transmission: 0.9, transparent: true, roughness: 0.2 });
+        const matCoolRed = new THREE.MeshPhysicalMaterial({ color: 0xbb2211, transmission: 0.9, transparent: true, roughness: 0.2 });
         
-        const matGlowCyan = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x00D2FF, emissiveIntensity: 1.5 });
-        const matGlowOrange = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0xffaa00, emissiveIntensity: 2.0 });
-        const matGlowGreen = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x76b900, emissiveIntensity: 2.5 });
+        const matLedOrange = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0xff7700, emissiveIntensity: 2.0 });
+        const matLedGreen = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x44ff00, emissiveIntensity: 2.0 });
 
-        const animated = { turbineShell: null, bessWalls: [], bessRoof: null, heroBridge: null, nvlinkSpine: null, manifolds: null, otherTrays: [] };
-        let turbineRotor, mainShaft;
+        const animated = { 
+            turbineShell: null, drivetrainShaft: null, gearboxGroup: null, hsShaft: null, generatorGroup: null, genRotor: null,
+            inspectionLight: null,
+            bessWalls: [], bessRoof: null, heroBridge: null, nvlinkSpine: null, manifolds: null, otherTrays: [] 
+        };
+        let turbineRotor, windParticles;
 
-        // --- Model Creation Functions ---
+        // --- 사실적인 공업용 터빈 모델링 ---
         function createTurbine() {
             const group = new THREE.Group();
-            const tower = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 6, 160, 64), matWhite);
-            tower.position.y = 80; tower.castShadow = true; group.add(tower);
-            const nacelle = new THREE.Group(); nacelle.position.y = 160; group.add(nacelle);
-
-            mainShaft = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 6, 32), matSteel);
-            mainShaft.rotation.x = Math.PI / 2; mainShaft.position.set(0, 0, 3);
-            const gearbox = new THREE.Mesh(new THREE.BoxGeometry(3.5, 3.5, 4.5), matDarkMetal); gearbox.position.set(0, 0, -1);
-            const generator = new THREE.Mesh(new THREE.CylinderGeometry(3, 3, 3.5, 32), matCopper);
-            generator.rotation.x = Math.PI / 2; generator.position.set(0, 0, -5.5);
             
-            nacelle.add(mainShaft, gearbox, generator);
+            const towerHeight = 160;
+            const towerGeo = new THREE.CylinderGeometry(3.5, 8.0, towerHeight, 64);
+            const tower = new THREE.Mesh(towerGeo, matExterior);
+            tower.position.y = towerHeight / 2; tower.castShadow = true; tower.receiveShadow = true;
+            
+            const base = new THREE.Mesh(new THREE.CylinderGeometry(8.8, 9.8, 4, 64), matCastIron);
+            base.position.y = 2; group.add(tower, base);
 
-            animated.turbineShell = new THREE.Mesh(new THREE.CapsuleGeometry(4.2, 14, 32, 64), matTurbineShell);
-            animated.turbineShell.rotation.x = Math.PI / 2; animated.turbineShell.position.set(0, 0, -1);
-            animated.turbineShell.castShadow = true; nacelle.add(animated.turbineShell);
+            const yawGear = new THREE.Mesh(new THREE.CylinderGeometry(3.2, 3.2, 1.2, 64), matMachinedSteel);
+            yawGear.position.y = towerHeight + 0.6; yawGear.receiveShadow = true; group.add(yawGear);
 
-            turbineRotor = new THREE.Group(); turbineRotor.position.set(0, 160, 6); group.add(turbineRotor);
-            const hub = new THREE.Mesh(new THREE.SphereGeometry(3, 32, 32), matWhite); hub.scale.set(1, 1, 1.4); turbineRotor.add(hub);
+            const nacelle = new THREE.Group(); nacelle.position.y = towerHeight + 1.2; group.add(nacelle);
+
+            const bedplate = new THREE.Mesh(new THREE.BoxGeometry(4.5, 1.5, 16), matCastIron);
+            bedplate.position.set(0, 0.75, -1.5); bedplate.castShadow = true; bedplate.receiveShadow = true;
+            nacelle.add(bedplate);
+
+            const internals = new THREE.Group(); internals.position.set(0, 3.2, 0);
+            
+            // 내부 기계 정비등
+            animated.inspectionLight = new THREE.PointLight(0xffeedd, 0, 35);
+            animated.inspectionLight.position.set(0, 5, -4); internals.add(animated.inspectionLight);
+            
+            const bearing = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.2, 1.8, 64), matCastIron);
+            bearing.rotation.x = Math.PI/2; bearing.position.set(0, 0, 4.5);
+            bearing.castShadow = true; bearing.receiveShadow = true; internals.add(bearing);
+
+            animated.drivetrainShaft = new THREE.Group(); animated.drivetrainShaft.position.set(0, 0, 2.5);
+            const shaftMesh = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.6, 4.5, 64), matMachinedSteel);
+            shaftMesh.rotation.x = Math.PI / 2; shaftMesh.castShadow = true; shaftMesh.receiveShadow = true;
+            animated.drivetrainShaft.add(shaftMesh); internals.add(animated.drivetrainShaft);
+
+            animated.gearboxGroup = new THREE.Group(); animated.gearboxGroup.position.set(0, 0, -1.0);
+            const gbMain = new THREE.Mesh(new THREE.CylinderGeometry(3.6, 3.6, 3.8, 64), matCastIron);
+            gbMain.rotation.x = Math.PI/2; gbMain.castShadow = true; gbMain.receiveShadow = true;
+            const gbMount = new THREE.Mesh(new THREE.BoxGeometry(4.8, 2.5, 3.2), matCastIron);
+            gbMount.position.y = -1.5; gbMount.castShadow = true; gbMount.receiveShadow = true;
+            animated.gearboxGroup.add(gbMain, gbMount);
+
+            for(let i=0; i<8; i++) { 
+                const fin = new THREE.Mesh(new THREE.CylinderGeometry(3.8, 3.8, 0.1, 64), matMachinedSteel);
+                fin.rotation.x = Math.PI/2; fin.position.z = -1.2 + i*0.35; animated.gearboxGroup.add(fin);
+            }
+            internals.add(animated.gearboxGroup);
+
+            animated.hsShaft = new THREE.Group(); animated.hsShaft.position.set(0, 0, -4.5);
+            const hsMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 3.5, 32), matMachinedSteel);
+            hsMesh.rotation.x = Math.PI/2; hsMesh.castShadow = true; animated.hsShaft.add(hsMesh);
+            internals.add(animated.hsShaft);
+
+            const brakeDisk = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.6, 0.25, 64), matMachinedSteel);
+            brakeDisk.rotation.x = Math.PI/2; brakeDisk.position.set(0, 0, -3.8); brakeDisk.castShadow = true;
+            const caliper = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.4, 0.8), matCastIron);
+            caliper.position.set(1.3, 0, -3.8); caliper.castShadow = true; internals.add(brakeDisk, caliper);
+
+            animated.generatorGroup = new THREE.Group(); animated.generatorGroup.position.set(0, 0, -8.0);
+            const genShell = new THREE.Mesh(new THREE.CylinderGeometry(3.4, 3.4, 4.3, 64), matCastIron);
+            genShell.rotation.x = Math.PI/2; genShell.castShadow = true; genShell.receiveShadow = true;
+            const genCap = new THREE.Mesh(new THREE.SphereGeometry(3.4, 64, 32, 0, Math.PI*2, 0, Math.PI/2), matCastIron);
+            genCap.rotation.x = -Math.PI/2; genCap.position.z = -2.15; genCap.castShadow = true;
+            animated.generatorGroup.add(genShell, genCap);
+
+            const statorCoils = new THREE.Group();
+            for(let i=0; i<24; i++) {
+                const coil = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.2, 4.2), matCopper);
+                coil.position.set(Math.cos(i * Math.PI/12) * 3.0, Math.sin(i * Math.PI/12) * 3.0, 0); coil.rotation.z = i * Math.PI/12;
+                statorCoils.add(coil);
+            }
+            animated.generatorGroup.add(statorCoils);
+
+            animated.genRotor = new THREE.Group();
+            const genInner = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 2.8, 4.5, 64), matMachinedSteel);
+            genInner.rotation.x = Math.PI/2; animated.genRotor.add(genInner); animated.generatorGroup.add(animated.genRotor);
+
+            internals.add(animated.generatorGroup); nacelle.add(internals);
+
+            const shellGeo = new THREE.CapsuleGeometry(4.8, 13, 32, 64);
+            const posAttr = shellGeo.attributes.position;
+            for(let i=0; i<posAttr.count; i++) {
+                let y = posAttr.getY(i); let x = posAttr.getX(i); let z = posAttr.getZ(i);
+                if (y < 0) { let taper = 1.0 + (y / 6.5) * 0.35; x *= taper; z *= taper; }
+                if (x > 2.2) x = 2.2 + (x - 2.2) * 0.15; posAttr.setXYZ(i, x, y, z);
+            }
+            shellGeo.computeVertexNormals(); shellGeo.rotateZ(Math.PI/2); shellGeo.rotateY(Math.PI/2);
+
+            animated.turbineShell = new THREE.Mesh(shellGeo, matTurbineShell);
+            animated.turbineShell.position.set(0, 3.5, -1.5);
+            animated.turbineShell.castShadow = true; animated.turbineShell.receiveShadow = true;
+            nacelle.add(animated.turbineShell);
+
+            turbineRotor = new THREE.Group(); turbineRotor.position.set(0, 164.2, 7.5); group.add(turbineRotor);
+            
+            const hubPoints = [];
+            for ( let i = 0; i <= 30; i ++ ) {
+                let f = i/30; let y_pos = f * 6.0; let radius = Math.sqrt(1 - Math.pow(f, 2)) * 4.0;
+                hubPoints.push(new THREE.Vector2(Math.max(0.01, radius), y_pos));
+            }
+            const hub = new THREE.Mesh(new THREE.LatheGeometry(hubPoints, 64), matExterior);
+            hub.rotation.x = -Math.PI / 2; hub.castShadow = true; hub.receiveShadow = true;
+            turbineRotor.add(hub);
 
             for(let i=0; i<3; i++) {
-                const bladeGeo = new THREE.CylinderGeometry(0.3, 2, 75, 32); bladeGeo.scale(1, 1, 0.1); bladeGeo.translate(0, 37.5, 0); 
-                const blade = new THREE.Mesh(bladeGeo, matWhite); blade.rotation.y = 0.2; blade.castShadow = true;
-                const pivot = new THREE.Group(); pivot.rotation.z = (i * Math.PI * 2) / 3; pivot.add(blade); turbineRotor.add(pivot);
+                const bladeGroup = new THREE.Group();
+                const root = new THREE.Mesh(new THREE.CylinderGeometry(1.3, 1.3, 4, 32), matExterior);
+                root.position.y = 2; bladeGroup.add(root);
+
+                const length = 95; const bodyGeo = new THREE.CylinderGeometry(1.3, 0.05, length, 32, 16);
+                bodyGeo.translate(0, length/2, 0);
+                const pos = bodyGeo.attributes.position;
+                for(let v=0; v<pos.count; v++) {
+                    let y = pos.getY(v); let factor = y / length; let vx = pos.getX(v); let vz = pos.getZ(v);
+                    let widthScale = Math.sin(factor * Math.PI) * 1.9 + 0.8; 
+                    let thicknessScale = Math.max(0.015, 1.0 - factor * 0.96); 
+                    if (vz < 0) vz *= 1.6; 
+                    let angle = factor * Math.PI * 0.4; let cos = Math.cos(angle); let sin = Math.sin(angle);
+                    let sx = vx * thicknessScale; let sz = vz * widthScale;
+                    let nx = sx * cos - sz * sin; let nz = sx * sin + sz * cos;
+                    nz += Math.pow(factor, 2) * 4.5; pos.setXYZ(v, nx, y, nz);
+                }
+                bodyGeo.computeVertexNormals();
+                const body = new THREE.Mesh(bodyGeo, matExterior); body.position.y = 4; body.castShadow = true; body.receiveShadow = true;
+                bladeGroup.add(body);
+
+                const pivot = new THREE.Group(); pivot.rotation.z = (i * Math.PI * 2) / 3; pivot.add(bladeGroup); turbineRotor.add(pivot);
             }
             return group;
         }
 
+        // --- 오리지널 테마에 맞는 푸른빛 풍동 연무 입자 ---
+        function createWindMist() {
+            const particleCount = 1500;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const speeds = new Float32Array(particleCount);
+
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 500; 
+                positions[i * 3 + 1] = Math.random() * 350;     
+                positions[i * 3 + 2] = Math.random() * 500 - 250; 
+                speeds[i] = Math.random() * 1.2 + 0.3; 
+            }
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('speed', new THREE.BufferAttribute(speeds, 1));
+            const material = new THREE.PointsMaterial({
+                color: 0x3388ff, size: 0.8, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false
+            });
+            windParticles = new THREE.Points(geometry, material); scene.add(windParticles);
+        }
+
         function createBESS() {
             const group = new THREE.Group();
-            const base = new THREE.Mesh(new THREE.BoxGeometry(6, 0.5, 18), matDarkMetal); base.position.y = 0.25; group.add(base);
+            const base = new THREE.Mesh(new THREE.BoxGeometry(6, 0.5, 18), matCastIron); base.position.y = 0.25; group.add(base);
 
             const createCorrugatedWall = (w, h, d) => {
-                const wall = new THREE.Group();
-                const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), matWhite); wall.add(b);
-                const numRibs = Math.floor(w / 0.4);
-                const ribs = new THREE.InstancedMesh(new THREE.BoxGeometry(0.2, h, d+0.1), matWhite, numRibs);
+                const wall = new THREE.Group(); const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), matExterior); wall.add(b);
+                const numRibs = Math.floor(w / 0.4); const ribs = new THREE.InstancedMesh(new THREE.BoxGeometry(0.2, h, d+0.1), matExterior, numRibs);
                 const dummy = new THREE.Object3D();
                 for(let i=0; i<numRibs; i++) { dummy.position.set(-w/2 + 0.2 + i*0.4, 0, 0); dummy.updateMatrix(); ribs.setMatrixAt(i, dummy.matrix); }
                 ribs.instanceMatrix.needsUpdate = true; wall.add(ribs); return wall;
@@ -614,18 +778,14 @@
             animated.bessWalls.push(wallL, wallR, wallB, wallF); group.add(wallL, wallR, wallB, wallF);
 
             animated.bessRoof = new THREE.Group(); animated.bessRoof.position.set(0, 6.1, 0);
-            animated.bessRoof.add(new THREE.Mesh(new THREE.BoxGeometry(6.2, 0.4, 18.2), matWhite));
-            for(let i=0; i<4; i++) {
-                const hvac = new THREE.Mesh(new THREE.BoxGeometry(3, 1, 3), matSteel); hvac.position.set(0, 0.7, -6 + i*4);
-                animated.bessRoof.add(hvac);
-            }
+            animated.bessRoof.add(new THREE.Mesh(new THREE.BoxGeometry(6.2, 0.4, 18.2), matExterior));
+            for(let i=0; i<4; i++) { const hvac = new THREE.Mesh(new THREE.BoxGeometry(3, 1, 3), matMachinedSteel); hvac.position.set(0, 0.7, -6 + i*4); animated.bessRoof.add(hvac); }
             group.add(animated.bessRoof);
 
             for(let r=0; r<12; r++) {
                 for(let c of [-1, 1]) {
-                    const rack = new THREE.Mesh(new THREE.BoxGeometry(1.6, 5, 1.2), matSteel); rack.position.set(c * 1.5, 3, -7.5 + r*1.35);
-                    const led = new THREE.Mesh(new THREE.BoxGeometry(0.1, 4.5, 0.1), matGlowOrange); led.position.set(c > 0 ? -0.8 : 0.8, 0, 0); rack.add(led);
-                    group.add(rack);
+                    const rack = new THREE.Mesh(new THREE.BoxGeometry(1.6, 5, 1.2), matDarkChassis); rack.position.set(c * 1.5, 3, -7.5 + r*1.35);
+                    const led = new THREE.Mesh(new THREE.BoxGeometry(0.1, 4.5, 0.1), matLedOrange); led.position.set(c > 0 ? -0.8 : 0.8, 0, 0); rack.add(led); group.add(rack);
                 }
             }
             return group;
@@ -633,79 +793,52 @@
 
         function createComputeScaleUp() {
             const group = new THREE.Group();
+            const frameMat = new THREE.MeshStandardMaterial({ color: 0x333333, wireframe: true, metalness: 0.8 });
+            const frame = new THREE.Mesh(new THREE.BoxGeometry(3.2, 13.8, 5), frameMat); frame.position.y = 7; group.add(frame);
             
-            const frame = new THREE.Mesh(new THREE.BoxGeometry(3.2, 13.8, 5), new THREE.MeshStandardMaterial({ color: 0x444444, wireframe: true }));
-            frame.position.y = 7; group.add(frame);
-            
-            animated.nvlinkSpine = new THREE.Mesh(new THREE.BoxGeometry(2.4, 13, 0.6), matCopper);
-            animated.nvlinkSpine.position.set(0, 25, -2.2); group.add(animated.nvlinkSpine);
+            animated.nvlinkSpine = new THREE.Mesh(new THREE.BoxGeometry(2.4, 13, 0.6), matCopper); animated.nvlinkSpine.position.set(0, 25, -2.2); group.add(animated.nvlinkSpine);
 
             animated.manifolds = new THREE.Group();
             const pipeBlue = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 13.5, 16), matCoolBlue); pipeBlue.position.set(-1.2, 7, 2);
             const pipeRed = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 13.5, 16), matCoolRed); pipeRed.position.set(1.2, 7, 2);
-            animated.manifolds.add(pipeBlue, pipeRed);
-            animated.manifolds.position.y = 25;
-            group.add(animated.manifolds);
+            animated.manifolds.add(pipeBlue, pipeRed); animated.manifolds.position.y = 25; group.add(animated.manifolds);
 
             for(let i=0; i<18; i++) {
                 const tray = new THREE.Group(); 
-                const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.2, 3.8), matDarkMetal);
-                const bridge = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.3, 0.4), matCopper); 
-                bridge.position.set(0, 0.15, -1.7);
+                const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.2, 3.8), matDarkChassis);
+                const bridge = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.3, 0.4), matCopper); bridge.position.set(0, 0.15, -1.7);
                 
                 for(let gx=-1; gx<=1; gx+=2) {
                     for(let gz=-1; gz<=1; gz+=2) {
-                        const gpuGrp = new THREE.Group();
-                        gpuGrp.position.set(gx * 0.7, 0.15, gz * 0.8);
-                        
+                        const gpuGrp = new THREE.Group(); gpuGrp.position.set(gx * 0.7, 0.15, gz * 0.8);
                         const pcb = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.05, 1.2), matPCB);
                         const die = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.5), matSilicon); die.position.y = 0.05;
-                        const glowEdge = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.02, 0.52), matGlowGreen); glowEdge.position.y = 0.05;
-                        
-                        for(let h=-1; h<=1; h+=2) {
-                            const hbm = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.08, 0.5), matDarkMetal); hbm.position.set(h * 0.35, 0.05, 0); gpuGrp.add(hbm);
-                        }
-                        
+                        const glowEdge = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.02, 0.52), matLedGreen); glowEdge.position.y = 0.05;
+                        for(let h=-1; h<=1; h+=2) { const hbm = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.08, 0.5), matCastIron); hbm.position.set(h * 0.35, 0.05, 0); gpuGrp.add(hbm); }
                         const coldPlate = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.1, 1.0), matCopper); coldPlate.position.y = 0.15;
                         gpuGrp.add(pcb, die, glowEdge, coldPlate); tray.add(gpuGrp);
                     }
                 }
-                
                 const ledGrp = new THREE.Group(); ledGrp.position.set(0, 0.1, 1.91);
-                for(let j=0; j<4; j++) {
-                    const led = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.05, 0.1), matGlowGreen); led.position.set(-0.9 + j*0.6, 0, 0); ledGrp.add(led);
-                }
-                
+                for(let j=0; j<4; j++) { const led = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.05, 0.1), matLedGreen); led.position.set(-0.9 + j*0.6, 0, 0); ledGrp.add(led); }
                 tray.add(chassis, bridge, ledGrp);
-                
-                if (i === 9) {
-                    animated.heroBridge = bridge;
-                    bridge.position.z = -5;
-                    tray.position.set(0, 1.0 + i*0.7, 0);
-                } else {
-                    animated.otherTrays.push(tray);
-                    tray.position.set(0, 1.0 + i*0.7, 6);
-                }
+                if (i === 9) { animated.heroBridge = bridge; bridge.position.z = -5; tray.position.set(0, 1.0 + i*0.7, 0);
+                } else { animated.otherTrays.push(tray); tray.position.set(0, 1.0 + i*0.7, 6); }
                 group.add(tray); 
             }
             return group;
         }
 
-        // Layout Config
-        const posTurbine = { x: 0, y: 0, z: 0 };
-        const posBess = { x: 400, y: 0, z: -400 };
-        const posDc = { x: 800, y: 0, z: -800 };
+        const posTurbine = { x: 0, y: 0, z: 0 }; const posBess = { x: 400, y: 0, z: -400 }; const posDc = { x: 800, y: 0, z: -800 };
 
         const turbine = createTurbine(); turbine.position.set(posTurbine.x, posTurbine.y, posTurbine.z); scene.add(turbine);
+        createWindMist();
         const bess = createBESS(); bess.position.set(posBess.x, posBess.y, posBess.z); scene.add(bess);
         const dc = createComputeScaleUp(); dc.position.set(posDc.x, posDc.y, posDc.z); scene.add(dc);
 
-        // Background Instanced Meshes
         const dummyBg = new THREE.Object3D();
-        
-        let validBessCount = 0;
-        for(let r=0; r<10; r++) { for(let c=0; c<10; c++) { if(!(r===5 && c===5)) validBessCount++; } }
-        const bgBessIMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(6, 6.1, 18), matWhite, validBessCount);
+        let validBessCount = 0; for(let r=0; r<10; r++) { for(let c=0; c<10; c++) { if(!(r===5 && c===5)) validBessCount++; } }
+        const bgBessIMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(6, 6.1, 18), matExterior, validBessCount);
         let bIdx = 0;
         for(let r=0; r<10; r++) {
             for(let c=0; c<10; c++) {
@@ -715,22 +848,17 @@
         }
         bgBessIMesh.instanceMatrix.needsUpdate = true; scene.add(bgBessIMesh);
 
-        const bgRackGroup = new THREE.Group();
-        bgRackGroup.position.y = -20;
-        
-        let validRackCount = 0;
-        for(let r=0; r<4; r++) { for(let c=0; c<60; c++) { if(!(r===1 && c===30) && !(r===2 && c===30)) validRackCount++; } }
-        const bgRackIMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(3.2, 14, 5.2), matDarkMetal, validRackCount);
-        const bgLedIMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.1, 13, 0.1), matGlowGreen, validRackCount);
+        const bgRackGroup = new THREE.Group(); bgRackGroup.position.y = -20;
+        let validRackCount = 0; for(let r=0; r<4; r++) { for(let c=0; c<60; c++) { if(!(r===1 && c===30) && !(r===2 && c===30)) validRackCount++; } }
+        const bgRackIMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(3.2, 14, 5.2), matDarkChassis, validRackCount);
+        const bgLedIMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.1, 13, 0.1), matLedGreen, validRackCount);
         
         let rIdx = 0;
         for(let r=0; r<4; r++) {
-            const sideX = (r < 2) ? -1 : 1;
-            const aisleX = (r % 2 === 0) ? -2 : 2;
+            const sideX = (r < 2) ? -1 : 1; const aisleX = (r % 2 === 0) ? -2 : 2;
             for(let c=0; c<60; c++) {
                 if((r===1 || r===2) && c===30) continue;
-                const px = posDc.x + sideX*12 + aisleX*4;
-                const pz = posDc.z + (c-30)*6;
+                const px = posDc.x + sideX*12 + aisleX*4; const pz = posDc.z + (c-30)*6;
                 dummyBg.position.set(px, 7, pz); dummyBg.updateMatrix(); bgRackIMesh.setMatrixAt(rIdx, dummyBg.matrix);
                 dummyBg.position.set(px, 7, pz + 2.6); dummyBg.updateMatrix(); bgLedIMesh.setMatrixAt(rIdx, dummyBg.matrix);
                 rIdx++;
@@ -739,7 +867,6 @@
         bgRackIMesh.instanceMatrix.needsUpdate = true; bgLedIMesh.instanceMatrix.needsUpdate = true;
         bgRackGroup.add(bgRackIMesh, bgLedIMesh); scene.add(bgRackGroup);
 
-        // Loading Screen Management
         let loaderRemoved = false;
         function removeLoader() {
             if (loaderRemoved) return;
@@ -747,61 +874,63 @@
             if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 1000); }
             loaderRemoved = true;
         }
-        window.addEventListener('load', () => setTimeout(removeLoader, 800));
-        setTimeout(removeLoader, 3500); 
+        window.addEventListener('load', () => setTimeout(removeLoader, 800)); setTimeout(removeLoader, 3500); 
 
-        // Camera and Animation Loop
         const clock = new THREE.Clock();
-        camera.position.set(-60, 180, 80);
-        const cameraTarget = new THREE.Vector3(0, 160, 0);
-        const proxyTarget = { x: 0, y: 160, z: 0 };
-        const tmpTarget = new THREE.Vector3();
+        camera.position.set(-80, 50, 130);
+        const cameraTarget = new THREE.Vector3(0, 140, 0); const proxyTarget = { x: 0, y: 140, z: 0 }; const tmpTarget = new THREE.Vector3();
 
         let isSectionVisible = true;
         const observer = new IntersectionObserver((entries) => { entries.forEach(e => isSectionVisible = e.isIntersecting); }, { threshold: 0 });
-        const archSection = document.getElementById('architecture');
-        if (archSection) observer.observe(archSection);
+        const archSection = document.getElementById('architecture'); if (archSection) observer.observe(archSection);
 
         let frameCount = 0;
         function animate() {
-            requestAnimationFrame(animate);
-            frameCount++;
-            if (!isSectionVisible && frameCount > 10) return; 
-            if (frameCount === 5) removeLoader();
+            requestAnimationFrame(animate); frameCount++;
+            if (!isSectionVisible && frameCount > 10) return; if (frameCount === 5) removeLoader();
 
-            const time = clock.getElapsedTime();
+            tmpTarget.set(proxyTarget.x, proxyTarget.y, proxyTarget.z); cameraTarget.lerp(tmpTarget, 0.08); camera.lookAt(cameraTarget);
 
-            tmpTarget.set(proxyTarget.x, proxyTarget.y, proxyTarget.z);
-            cameraTarget.lerp(tmpTarget, 0.08);
-            camera.lookAt(cameraTarget);
+            if (turbineRotor) turbineRotor.rotation.z -= 0.006;
+            if (animated.drivetrainShaft) animated.drivetrainShaft.rotation.z -= 0.006; 
+            if (animated.hsShaft) animated.hsShaft.rotation.z -= 0.25; 
+            if (animated.genRotor) animated.genRotor.rotation.z -= 0.25; 
 
-            if (turbineRotor) turbineRotor.rotation.z -= 0.03;
-            if (mainShaft) mainShaft.rotation.z -= 0.03;
-
-            if (matGlowGreen) matGlowGreen.emissiveIntensity = 1.5 + Math.max(0, Math.sin(time * 5)) * 2.0;
-            if (matGlowOrange) matGlowOrange.emissiveIntensity = 1.0 + Math.max(0, Math.sin(time * 3)) * 1.5;
+            if(windParticles) {
+                const pos = windParticles.geometry.attributes.position.array; const speeds = windParticles.geometry.attributes.speed.array;
+                for(let i=0; i<pos.length/3; i++) {
+                    pos[i*3 + 2] -= speeds[i]; 
+                    const dx = pos[i*3]; const dy = pos[i*3 + 1] - 160; const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (pos[i*3 + 2] < 30 && pos[i*3 + 2] > -40 && dist < 100) {
+                        pos[i*3] += Math.sin(clock.getElapsedTime() + i) * 0.2; pos[i*3 + 1] += Math.cos(clock.getElapsedTime() + i) * 0.2;
+                    }
+                    if(pos[i*3 + 2] < -250) { pos[i*3 + 2] = 250; pos[i*3] = (Math.random() - 0.5) * 500; pos[i*3 + 1] = Math.random() * 350; }
+                }
+                windParticles.geometry.attributes.position.needsUpdate = true;
+            }
 
             try { composer.render(); } catch(e) { renderer.render(scene, camera); }
         }
         animate(); 
 
-        // GSAP UI Animations
         gsap.utils.toArray('.gs-card').forEach((card) => {
-            gsap.fromTo(card, { opacity: 0, y: 50 }, {
-                scrollTrigger: { trigger: card.parentElement, start: "top 60%", end: "bottom 30%", toggleActions: "play reverse play reverse" },
-                opacity: 1, y: 0, duration: 1.2, ease: "power3.out"
-            });
+            gsap.fromTo(card, { opacity: 0, y: 50 }, { scrollTrigger: { trigger: card.parentElement, start: "top 60%", end: "bottom 30%", toggleActions: "play reverse play reverse" }, opacity: 1, y: 0, duration: 1.2, ease: "power3.out" });
         });
 
-        // GSAP 3D Camera Timeline (Triggered ONLY in #architecture section)
         const tl = gsap.timeline({ scrollTrigger: { trigger: "#architecture", start: "top top", end: "bottom bottom", scrub: 1.5 } });
 
-        tl.to(camera.position, { x: 35, y: 175, z: -40, ease: "power1.inOut" }, 0)
-          .to(proxyTarget, { x: 0, y: 160, z: 0, ease: "power1.inOut" }, 0)
-          .to(animated.turbineShell.position, { y: 15, ease: "power2.inOut" }, 0.2)
-          .to(matTurbineShell, { opacity: 0.15, duration: 0.5 }, 0.2);
+        tl.to(camera.position, { x: 40, y: 175, z: -25, ease: "power1.inOut" }, 0)
+          .to(proxyTarget, { x: 0, y: 164, z: -2, ease: "power1.inOut" }, 0)
+          .to(animated.turbineShell.position, { y: 7.5, ease: "power2.inOut" }, 0.1) 
+          .to(matTurbineShell.color, { r: 0.12, g: 0.12, b: 0.15, duration: 0.6 }, 0.1)
+          .to(matTurbineShell, { opacity: 1.0, roughness: 0.1, transmission: 0.95, metalness: 0.4, duration: 0.6 }, 0.1) 
+          .to(animated.generatorGroup.position, { z: -12.5, ease: "power2.inOut" }, 0.2)
+          .to(animated.gearboxGroup.position, { z: -4.0, ease: "power2.inOut" }, 0.2)
+          .to(animated.inspectionLight, { intensity: 40.0, duration: 0.5 }, 0.2) 
+          .to(camera.position, { x: -22, y: 169, z: -22, ease: "power1.inOut" }, 0.4)
+          .to(proxyTarget, { x: 0, y: 164, z: -6, ease: "power1.inOut" }, 0.4);
 
-        tl.to(camera.position, { x: posBess.x + 50, y: 25, z: posBess.z - 50, ease: "power2.inOut" }, 1)
+        tl.to(camera.position, { x: posBess.x + 45, y: 22, z: posBess.z - 45, ease: "power2.inOut" }, 1)
           .to(proxyTarget, { x: posBess.x, y: 8, z: posBess.z, ease: "power2.inOut" }, 1)
           .to(animated.bessRoof.position, { y: 12, ease: "power2.inOut" }, 1.3)
           .to(animated.bessWalls[0].position, { x: -10, ease: "power2.inOut" }, 1.3)
@@ -822,19 +951,15 @@
           .to(animated.nvlinkSpine.position, { y: 7, ease: "power2.out", duration: 0.6 }, 4.1)
           .to(animated.manifolds.position, { y: 0, ease: "power2.out", duration: 0.6 }, 4.2);
           
-        animated.otherTrays.forEach((tray, idx) => {
-            tl.to(tray.position, { z: 0, ease: "back.out(1.2)" }, 4.3 + (idx * 0.02));
-        });
+        animated.otherTrays.forEach((tray, idx) => { tl.to(tray.position, { z: 0, ease: "back.out(1.2)" }, 4.3 + (idx * 0.02)); });
 
         tl.to(camera.position, { x: posDc.x + 15, y: 15, z: posDc.z + 130, ease: "power2.inOut" }, 5)
           .to(proxyTarget, { x: posDc.x, y: 7, z: posDc.z - 150, ease: "power2.inOut" }, 5)
           .to(bgRackGroup.position, { y: 0, ease: "power2.out", duration: 1.0 }, 5.2);
 
         window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            composer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight); composer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
 </body>
